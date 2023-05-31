@@ -1,7 +1,9 @@
+import Post from "./pages/Post";
+
 function App() {
   return (
-    <div className="App">
-      Todo: Setup Routes
+    <div>
+      <Post />
     </div>
   );
 }
