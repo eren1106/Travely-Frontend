@@ -1,0 +1,445 @@
+/********* WRAPPER *********/
+.postWrapper {
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.backBtn {
+  cursor: pointer;
+  font-size: large;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.postPanel {
+  width: 1000px;
+  margin: 0 auto;
+  background-color: var(--white);
+  padding: 30px 40px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.optionBtn {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  background-color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionBtn:hover {
+  background-color: var(--hover-grey);
+}
+
+.blueBtn {
+  background-color: var(--background-blue);
+  transition: all 0.3s ease;
+}
+
+.blueBtn:hover {
+  background-color: var(--hover-blue);
+}
+
+.purpleBtn {
+  background-color: var(--light-purple);
+  transition: all 0.3s ease;
+}
+
+.purpleBtn:hover {
+  background-color: var(--hover-purple);
+}
+
+/********* TOP SECTION *********/
+.topSection {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.profilePic {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+}
+
+.postDate {
+  font-size: 12px;
+  color: var(--grey-text);
+}
+
+
+/********* CONTENT SECTION *********/
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.captionInput {
+  background-color: var(--background-blue);
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-family: inherit;
+  font-size: inherit;
+  resize: none;
+}
+
+.editBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editBtn {
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.locationTag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--light-purple);
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.locationTag p{
+  font-size: 14px;
+}
+.locationTag i {
+  font-size: 16px;
+}
+.locationTag input {
+  border: none;
+  outline: none;
+  padding: 5px;
+}
+
+.postImage {
+  width: 100%;
+}
+
+.ratingAndComments {
+  display: flex;
+  gap: 20px;
+}
+
+.dataText {
+  color: var(--grey-text);
+  font-size: 14px;
+}
+
+.ratingWrapper {
+  display : flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ratingStars {
+  display: flex;
+}
+
+.ratingStar {
+  display: inline-block;
+  font-size: 30px !important;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.ratingStar.selected {
+  color: yellow;
+}
+
+.clearBtn {
+  padding: 8px;
+  border-radius: 5px;
+}
+
+
+/********* BOTTOM SECTION *********/
+.bottomSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ratingAndCommentBar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.iconWrapper {
+  cursor: pointer;
+}
+
+.postIcon {
+  font-size: 25px;
+}
+
+.outlinedIcon {
+  color: transparent;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: var(--black);
+}
+
+.isLike {
+  color: var(--like);
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commentPic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.currentUserCommentBar {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.commentInput {
+  background-color: var(--background-blue);
+  padding: 15px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  width: auto;
+  font-size: 16px;
+  flex: 1;
+  min-width: 30px;
+}
+
+.sendBtn {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendIcon {
+  font-size: 20px;
+}
+
+
+/********* RESPONSIVE ADJUSTMENT *********/
+@media screen and (max-width: 1100px) {
+  .postPanel {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .postPanel {
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .postWrapper {
+    padding: 20px;
+  }
+}
+
+
+/************ IMAGE SLIDES ************/
+/* Slideshow container */
+.slideshowContainer {
+  /* max-width: 1000px; */
+  width: 100%;
+  position: relative;
+  margin: auto;
+}
+
+.slideImg {
+  vertical-align: middle;
+  width: 100%;
+}
+
+.hideSlide {
+  display: none
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* image slides dots */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+/* fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {
+    opacity: .4
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+/* on smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+
+  .prev,
+  .next,
+  .text {
+    font-size: 11px
+  }
+}
+
+
+/********* POP UP DROPDOWN OPTIONS *********/
+.optionsList {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.option {
+  list-style: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.option:hover {
+  background-color: var(--hover-grey);
+}
+
+
+/********* DELETE CONFIRMATION POP UP *********/
+.popUpModal {
+  position: fixed;
+  z-index: 3;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid .888;
+  width: 30%;
+  min-width: 200px;
+  text-align: center;
+}
+
+.modalText {
+  margin-bottom: 10px;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.modalBtn {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+}
