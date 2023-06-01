@@ -5,19 +5,30 @@ import PlaceIcon from '@mui/icons-material/Place';
 import StarIcon from '@mui/icons-material/Star';
 import SendIcon from '@mui/icons-material/Send';
 import Comment from '../components/Comment';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 const Post = () => {
+  const { id } = useParams();
   const [showOption, setShowOption] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [postData, setPostData] = useState({
-    description: "Japan is a fascinating destination that seamlessly blends old-world charm with modern innovation. From the bustling streets of Tokyo to the peaceful temples of Kyoto, there's something for every traveler in this incredible country. Indulge in delicious cuisine, witness breathtaking natural beauty, and immerse yourself in the unique culture and traditions of Japan.",
-    location: "Japan, Tokyo",
-    images: [
-      `${process.env.PUBLIC_URL}/assets/japanView.jpeg`,
-      `${process.env.PUBLIC_URL}/assets/balloonView.jpg`,
-      `${process.env.PUBLIC_URL}/assets/usaView.jpg`
-    ],
-  });
+  const [postData, setPostData] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const res = await axios.get(`http://localhost:3001/api/posts/${id}`);
+      setPostData(res.data);
+      console.log(res.data);
+      setLoading(false);
+    }
+
+    fetchData();
+  }, [id]);
+
   const [descriptionEdit, setDescriptionEdit] = useState("");
   const [locationEdit, setLocationEdit] = useState("");
 
@@ -29,17 +40,17 @@ const Post = () => {
     {
       username: 'Saitama',
       text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-      imgSrc: 'assets/post.png'
+      imgSrc: `${process.env.PUBLIC_URL}/assets/eren.jpg`
     },
     {
       username: 'Reiner',
       text: 'cibxilxnjixopxkifxckmxchxohxigxnninixngdixlxiloumxi',
-      imgSrc: 'assets/reiner.jpeg'
+      imgSrc: `${process.env.PUBLIC_URL}/assets/reiner.jpeg`
     },
     {
       username: 'Bertholdt',
       text: 'Awesome place! ',
-      imgSrc: 'assets/bertholdt.jpeg'
+      imgSrc: `${process.env.PUBLIC_URL}/assets/bertholdt.jpeg`
     },
   ]);
 
@@ -71,7 +82,7 @@ const Post = () => {
   };
 
   const handleSaveEdit = () => {
-    if(descriptionEdit === "" || locationEdit === "") {
+    if (descriptionEdit === "" || locationEdit === "") {
       alert("Description and location cannot be empty");
       return;
     }
@@ -123,7 +134,7 @@ const Post = () => {
       {
         username: 'Eren',
         text: commentRef.current.value,
-        imgSrc: 'assets/eren.jpg'
+        imgSrc: `${process.env.PUBLIC_URL}/assets/eren.jpg`
       }
     ]);
 
@@ -131,128 +142,133 @@ const Post = () => {
   }
 
   return (
-    <main className={styles.postWrapper}>
-      <button className={`${styles.purpleBtn} ${styles.backBtn}`}>
-        Back
-      </button>
-      <div className={styles.postPanel}>
-        <button className={`${styles.optionBtn} ${styles.iconWrapper}`} onClick={toggleShowOption}>
-          <MoreHorizIcon />
-        </button>
-        {showOption && <ul className={`${styles.optionsList}`}>
-          <li className={styles.option} onClick={handleShowEdit}>Edit post</li>
-          <li className={styles.option} onClick={showDelete}>Delete post</li>
-        </ul>}
-        <section className={styles.topSection}>
-          <img className={styles.profilePic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
-          <div className={styles.topInfo}>
-            <h2 className={styles.userName}>Eren</h2>
-            <p className={styles.postDate}>April 9 2023, 13:40 pm</p>
-          </div>
-        </section>
-        <section className={styles.contentSection}>
-          {isEdit ?
-            <textarea
-              value={descriptionEdit}
-              className={styles.captionInput}
-              type="text"
-              placeholder="Write caption..."
-              rows="5"
-              onChange={handleDescriptionChange}
-            />
-            : <p className={styles.caption}>{postData.description}</p>
-          }
-          <div className={styles.locationTag}>
-            <PlaceIcon fontSize='small' />
-            {
-              isEdit ? <input
-                value={postData.location}
-                className={styles.locationInput}
-                type="text"
-                onChange={handleLocationChange}
-              />
-                : <p className={styles.locationText}>{postData.location}</p>
-            }
-          </div>
-          {isEdit && <div className={styles.editBar}>
-            <button className={`${styles.saveBtn} ${styles.editBtn} ${styles.purpleBtn}`} onClick={handleSaveEdit}>Save</button>
-            <button className={`${styles.cancelBtn} ${styles.editBtn} ${styles.blueBtn}`} onClick={handleCloseEdit}>Cancel</button>
-          </div>}
-          <div className={styles.slideshowContainer}>
-            {
-              postData.images.map((image, index) =>
-                <div className={`${currentImageIndex !== index && styles.hideSlide} ${styles.fade}`} key={index}>
-                  <div className={styles.numbertext}>{`${index + 1}/${postData.images.length}`}</div>
-                  <img className={styles.slideImg} src={image} alt="post" />
+    <div className={styles.postWrapper}>
+      {
+        loading ? <CircularProgress /> :
+          <div className={styles.mainContent}>
+            <button className={`${styles.purpleBtn} ${styles.backBtn}`}>
+              Back
+            </button>
+            <div className={styles.postPanel}>
+              <button className={`${styles.optionBtn} ${styles.iconWrapper}`} onClick={toggleShowOption}>
+                <MoreHorizIcon />
+              </button>
+              {showOption && <ul className={`${styles.optionsList}`}>
+                <li className={styles.option} onClick={handleShowEdit}>Edit post</li>
+                <li className={styles.option} onClick={showDelete}>Delete post</li>
+              </ul>}
+              <section className={styles.topSection}>
+                <img className={styles.profilePic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
+                <div className={styles.topInfo}>
+                  <h2 className={styles.userName}>Eren</h2>
+                  <p className={styles.postDate}>April 9 2023, 13:40 pm</p>
                 </div>
-              )
-            }
-            <div className={styles.prev} onClick={() => plusSlides(-1)}>❮</div>
-            <div className={styles.next} onClick={() => plusSlides(1)}>❯</div>
-          </div>
-          <br />
-          <div style={{ textAlign: 'center' }}>
-            {
-              postData.images.map((_, i) =>
-                <span className={`${styles.dot} ${currentImageIndex === i && styles.active}`} onClick={() => selectSlide(i)}></span>
-              )
-            }
-          </div>
-          <div className={`${styles.ratingAndComments}`}>
-            <p className={`${styles.ratingText} ${styles.dataText}`}>4.5 average rating</p>
-            <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
-            <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
-          </div>
-        </section>
-        <hr />
-        <section className={`${styles.bottomSection}`}>
-          <div className={`${styles.ratingWrapper}`}>
-            <p>Give a rating:</p>
-            <div className={`${styles.ratingStars}`}>
-              {
-                starIcons.map((_, i) => (
-                  <StarIcon
-                    key={i}
-                    className={`${styles.ratingStar} ${i < rating && styles.selected}`}
-                    onClick={() => handleClickStar(i + 1)}
+              </section>
+              <section className={styles.contentSection}>
+                {isEdit ?
+                  <textarea
+                    value={descriptionEdit}
+                    className={styles.captionInput}
+                    type="text"
+                    placeholder="Write description..."
+                    rows="5"
+                    onChange={handleDescriptionChange}
                   />
-                ))
+                  : <p className={styles.caption}>{postData.description}</p>
+                }
+                <div className={styles.locationTag}>
+                  <PlaceIcon fontSize='small' />
+                  {
+                    isEdit ? <input
+                      value={postData.location}
+                      className={styles.locationInput}
+                      type="text"
+                      onChange={handleLocationChange}
+                    />
+                      : <p className={styles.locationText}>{postData.location}</p>
+                  }
+                </div>
+                {isEdit && <div className={styles.editBar}>
+                  <button className={`${styles.saveBtn} ${styles.editBtn} ${styles.purpleBtn}`} onClick={handleSaveEdit}>Save</button>
+                  <button className={`${styles.cancelBtn} ${styles.editBtn} ${styles.blueBtn}`} onClick={handleCloseEdit}>Cancel</button>
+                </div>}
+                <div className={styles.slideshowContainer}>
+                  {
+                    postData.images.map((image, index) =>
+                      <div className={`${currentImageIndex !== index && styles.hideSlide} ${styles.fade}`} key={index}>
+                        <div className={styles.numbertext}>{`${index + 1}/${postData.images.length}`}</div>
+                        <img className={styles.slideImg} src={`${process.env.PUBLIC_URL}/assets/${image}`} alt="post" />
+                      </div>
+                    )
+                  }
+                  <div className={styles.prev} onClick={() => plusSlides(-1)}>❮</div>
+                  <div className={styles.next} onClick={() => plusSlides(1)}>❯</div>
+                </div>
+                <br />
+                <div style={{ textAlign: 'center' }}>
+                  {
+                    postData.images.map((_, i) =>
+                      <span className={`${styles.dot} ${currentImageIndex === i && styles.active}`} onClick={() => selectSlide(i)}></span>
+                    )
+                  }
+                </div>
+                <div className={`${styles.ratingAndComments}`}>
+                  <p className={`${styles.ratingText} ${styles.dataText}`}>4.5 average rating</p>
+                  <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
+                  <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
+                </div>
+              </section>
+              <hr />
+              <section className={`${styles.bottomSection}`}>
+                <div className={`${styles.ratingWrapper}`}>
+                  <p>Give a rating:</p>
+                  <div className={`${styles.ratingStars}`}>
+                    {
+                      starIcons.map((_, i) => (
+                        <StarIcon
+                          key={i}
+                          className={`${styles.ratingStar} ${i < rating && styles.selected}`}
+                          onClick={() => handleClickStar(i + 1)}
+                        />
+                      ))
+                    }
+                  </div>
+                  {rating > 0 && <button className={`${styles.clearBtn} ${styles.purpleBtn}`} onClick={() => handleRemoveRating()} >Clear Rating</button>}
+                </div>
+                <div className={`${styles.commentList}`}>
+                  {
+                    comments.map((comment) => (
+                      <Comment
+                        imgUrl={comment.imgSrc}
+                        name={comment.username}
+                        text={comment.text}
+                      />
+                    ))
+                  }
+                </div>
+                <div className={styles.currentUserCommentBar}>
+                  <img className={styles.commentPic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
+                  <input ref={commentRef} className={styles.commentInput} type="text" placeholder="Write a comment..." />
+                  <button onClick={handleSubmitComment} className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
+                    <SendIcon />
+                  </button>
+                </div>
+              </section>
+              {
+                showDeleteAlert && <div className={`${styles.confirmModal} ${styles.popUpModal}`}>
+                  <div className={`${styles.modalContent}`}>
+                    <p className={`${styles.modalText}`}>Are you sure you want to delete this post?</p>
+                    <div className={`${styles.modalButtons}`}>
+                      <button className={`${styles.confirmDeleteBtn} ${styles.modalBtn} ${styles.purpleBtn}`} onClick={deletePost}>Yes</button>
+                      <button className={`${styles.cancelDeleteBtn} cancelDeleteBtn ${styles.modalBtn} ${styles.blueBtn}`} onClick={closeDelete}>No</button>
+                    </div>
+                  </div>
+                </div>
               }
             </div>
-            {rating > 0 && <button className={`${styles.clearBtn} ${styles.purpleBtn}`} onClick={() => handleRemoveRating()} >Clear Rating</button>}
           </div>
-          <div className={`${styles.commentList}`}>
-            {
-              comments.map((comment) => (
-                <Comment
-                  imgUrl={comment.imgSrc}
-                  name={comment.username}
-                  text={comment.text}
-                />
-              ))
-            }
-          </div>
-          <div className={styles.currentUserCommentBar}>
-            <img className={styles.commentPic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
-            <input ref={commentRef} className={styles.commentInput} type="text" placeholder="Write a comment..." />
-            <button onClick={handleSubmitComment} className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
-              <SendIcon />
-            </button>
-          </div>
-        </section>
-        {
-          showDeleteAlert && <div className={`${styles.confirmModal} ${styles.popUpModal}`}>
-            <div className={`${styles.modalContent}`}>
-              <p className={`${styles.modalText}`}>Are you sure you want to delete this post?</p>
-              <div className={`${styles.modalButtons}`}>
-                <button className={`${styles.confirmDeleteBtn} ${styles.modalBtn} ${styles.purpleBtn}`} onClick={deletePost}>Yes</button>
-                <button className={`${styles.cancelDeleteBtn} cancelDeleteBtn ${styles.modalBtn} ${styles.blueBtn}`} onClick={closeDelete}>No</button>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-    </main>
+      }
+    </div>
   );
 };
 
