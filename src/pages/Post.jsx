@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from '../styles/post.module.css';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PlaceIcon from '@mui/icons-material/Place';
@@ -17,21 +17,48 @@ const Post = () => {
       `${process.env.PUBLIC_URL}/assets/balloonView.jpg`,
       `${process.env.PUBLIC_URL}/assets/usaView.jpg`
     ],
-  })
+  });
+  const [descriptionEdit, setDescriptionEdit] = useState("");
+  const [locationEdit, setLocationEdit] = useState("");
+
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [rating, setRating] = useState(0);
+  const commentRef = useRef(null);
+  const [comments, setComments] = useState([ // mock data
+    {
+      username: 'Saitama',
+      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+      imgSrc: 'assets/post.png'
+    },
+    {
+      username: 'Reiner',
+      text: 'cibxilxnjixopxkifxckmxchxohxigxnninixngdixlxiloumxi',
+      imgSrc: 'assets/reiner.jpeg'
+    },
+    {
+      username: 'Bertholdt',
+      text: 'Awesome place! ',
+      imgSrc: 'assets/bertholdt.jpeg'
+    },
+  ]);
+
+  const starIcons = Array(5).fill(null);
 
   const toggleShowOption = () => {
     setShowOption(!showOption);
   };
 
-  const showEdit = () => {
+  const handleShowEdit = () => {
+    setDescriptionEdit(postData.description);
+    setLocationEdit(postData.location);
     setShowOption(false);
     setIsEdit(true);
   };
 
-  const closeEdit = () => {
+  const handleCloseEdit = () => {
     setIsEdit(false);
+    setDescriptionEdit(postData.description)
   };
 
   const showDelete = () => {
@@ -43,7 +70,17 @@ const Post = () => {
     setShowDeleteAlert(false);
   };
 
-  const saveEdit = () => {
+  const handleSaveEdit = () => {
+    if(descriptionEdit === "" || locationEdit === "") {
+      alert("Description and location cannot be empty");
+      return;
+    }
+
+    setPostData({
+      ...postData,
+      description: descriptionEdit,
+      location: locationEdit,
+    });
     setIsEdit(false);
   };
 
@@ -65,17 +102,32 @@ const Post = () => {
   };
 
   const handleDescriptionChange = (e) => {
-    setPostData({
-      ...postData,
-      description: e.target.value,
-    });
+    setDescriptionEdit(e.target.value);
   }
 
   const handleLocationChange = (e) => {
-    setPostData({
-      ...postData,
-      location: e.target.value,
-    });
+    setLocationEdit(e.target.value);
+  }
+
+  const handleClickStar = (n) => {
+    setRating(n);
+  }
+
+  const handleRemoveRating = () => {
+    setRating(0);
+  }
+
+  const handleSubmitComment = () => {
+    setComments([
+      ...comments,
+      {
+        username: 'Eren',
+        text: commentRef.current.value,
+        imgSrc: 'assets/eren.jpg'
+      }
+    ]);
+
+    commentRef.current.value = "";
   }
 
   return (
@@ -88,7 +140,7 @@ const Post = () => {
           <MoreHorizIcon />
         </button>
         {showOption && <ul className={`${styles.optionsList}`}>
-          <li className={styles.option} onClick={showEdit}>Edit post</li>
+          <li className={styles.option} onClick={handleShowEdit}>Edit post</li>
           <li className={styles.option} onClick={showDelete}>Delete post</li>
         </ul>}
         <section className={styles.topSection}>
@@ -101,7 +153,7 @@ const Post = () => {
         <section className={styles.contentSection}>
           {isEdit ?
             <textarea
-              value={postData.description}
+              value={descriptionEdit}
               className={styles.captionInput}
               type="text"
               placeholder="Write caption..."
@@ -123,13 +175,13 @@ const Post = () => {
             }
           </div>
           {isEdit && <div className={styles.editBar}>
-            <button className={`${styles.saveBtn} ${styles.editBtn} ${styles.purpleBtn}`} onClick={saveEdit}>Save</button>
-            <button className={`${styles.cancelBtn} ${styles.editBtn} ${styles.blueBtn}`} onClick={closeEdit}>Cancel</button>
+            <button className={`${styles.saveBtn} ${styles.editBtn} ${styles.purpleBtn}`} onClick={handleSaveEdit}>Save</button>
+            <button className={`${styles.cancelBtn} ${styles.editBtn} ${styles.blueBtn}`} onClick={handleCloseEdit}>Cancel</button>
           </div>}
           <div className={styles.slideshowContainer}>
             {
               postData.images.map((image, index) =>
-                <div className={`${currentImageIndex !== index && styles.hideSlide} ${styles.fade}`}>
+                <div className={`${currentImageIndex !== index && styles.hideSlide} ${styles.fade}`} key={index}>
                   <div className={styles.numbertext}>{`${index + 1}/${postData.images.length}`}</div>
                   <img className={styles.slideImg} src={image} alt="post" />
                 </div>
@@ -141,14 +193,14 @@ const Post = () => {
           <br />
           <div style={{ textAlign: 'center' }}>
             {
-              postData.images.map((image, index) =>
-                <span className={styles.dot} onClick={() => selectSlide(index)}></span>
+              postData.images.map((_, i) =>
+                <span className={`${styles.dot} ${currentImageIndex === i && styles.active}`} onClick={() => selectSlide(i)}></span>
               )
             }
           </div>
           <div className={`${styles.ratingAndComments}`}>
             <p className={`${styles.ratingText} ${styles.dataText}`}>4.5 average rating</p>
-            <p className={`${styles.commentsText} ${styles.dataText}`}>123 comments</p>
+            <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
             <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
           </div>
         </section>
@@ -157,35 +209,33 @@ const Post = () => {
           <div className={`${styles.ratingWrapper}`}>
             <p>Give a rating:</p>
             <div className={`${styles.ratingStars}`}>
-              <StarIcon className={styles.ratingStar} />
-              <StarIcon className={styles.ratingStar} />
-              <StarIcon className={styles.ratingStar} />
-              <StarIcon className={styles.ratingStar} />
-              <StarIcon className={styles.ratingStar} />
+              {
+                starIcons.map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    className={`${styles.ratingStar} ${i < rating && styles.selected}`}
+                    onClick={() => handleClickStar(i + 1)}
+                  />
+                ))
+              }
             </div>
-            <button className={`${styles.clearBtn} ${styles.purpleBtn}`}>Clear Rating</button>
+            {rating > 0 && <button className={`${styles.clearBtn} ${styles.purpleBtn}`} onClick={() => handleRemoveRating()} >Clear Rating</button>}
           </div>
           <div className={`${styles.commentList}`}>
-            <Comment
-              imgUrl={`${process.env.PUBLIC_URL}/assets/reiner.jpeg`}
-              name="Reiner"
-              text="hello world hello world hello world hello world"
-            />
-            <Comment
-              imgUrl={`${process.env.PUBLIC_URL}/assets/reiner.jpeg`}
-              name="Reiner"
-              text="hello world hello world hello world hello world"
-            />
-            <Comment
-              imgUrl={`${process.env.PUBLIC_URL}/assets/reiner.jpeg`}
-              name="Reiner"
-              text="hello world hello world hello world hello world"
-            />
+            {
+              comments.map((comment) => (
+                <Comment
+                  imgUrl={comment.imgSrc}
+                  name={comment.username}
+                  text={comment.text}
+                />
+              ))
+            }
           </div>
-          <div className={`${styles.currentUserCommentBar}`}>
-            <img className={`${styles.commentPic}`} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
-            <input className={`${styles.commentInput}`} type="text" placeholder="Write a comment..." />
-            <button className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
+          <div className={styles.currentUserCommentBar}>
+            <img className={styles.commentPic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
+            <input ref={commentRef} className={styles.commentInput} type="text" placeholder="Write a comment..." />
+            <button onClick={handleSubmitComment} className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
               <SendIcon />
             </button>
           </div>
