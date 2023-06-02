@@ -6,7 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import SendIcon from '@mui/icons-material/Send';
 import Comment from '../components/Comment';
 import axios from 'axios';
-import { useNavigate, useParams, Redirect, Navigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import LoadingOverlay from '../components/LoadingOverlay';
 
@@ -18,6 +18,7 @@ const Post = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState(0);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const Post = () => {
 
       await fetchPostData();
       await fetchUserRating();
+      await fetchComments();
 
       setInitialLoading(false);
     }
@@ -54,6 +56,17 @@ const Post = () => {
       }
     }
 
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/comments`); // fetch post data
+        setComments(res.data);
+        console.log(res.data);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+
     fetchData();
   }, [id, navigate]);
 
@@ -63,23 +76,6 @@ const Post = () => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const commentRef = useRef(null);
-  const [comments, setComments] = useState([ // mock data
-    {
-      username: 'Saitama',
-      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-      imgSrc: `${process.env.PUBLIC_URL}/assets/eren.jpg`
-    },
-    {
-      username: 'Reiner',
-      text: 'cibxilxnjixopxkifxckmxchxohxigxnninixngdixlxiloumxi',
-      imgSrc: `${process.env.PUBLIC_URL}/assets/reiner.jpeg`
-    },
-    {
-      username: 'Bertholdt',
-      text: 'Awesome place! ',
-      imgSrc: `${process.env.PUBLIC_URL}/assets/bertholdt.jpeg`
-    },
-  ]);
 
   const starIcons = Array(5).fill(null);
 
@@ -131,14 +127,14 @@ const Post = () => {
   const handleClickStar = async (n) => {
     setLoading(true);
 
-    try{
+    try {
       const res = await axios.put(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`, {
         rating: n,
       });
       console.log(res.data);
       setRating(n);
     }
-    catch(err) {
+    catch (err) {
       console.log(err);
     }
 
@@ -148,12 +144,12 @@ const Post = () => {
   const handleRemoveRating = async () => {
     setLoading(true);
 
-    try{
+    try {
       const res = await axios.delete(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`);
       console.log(res.data);
       setRating(0);
     }
-    catch(err) {
+    catch (err) {
       console.log(err);
     }
 
@@ -197,17 +193,34 @@ const Post = () => {
     // TODO: show react toast
   };
 
-  const handleSubmitComment = () => {
-    setComments([
-      ...comments,
-      {
-        username: 'Eren',
-        text: commentRef.current.value,
-        imgSrc: `${process.env.PUBLIC_URL}/assets/eren.jpg`
-      }
-    ]);
+  const handleSubmitComment = async () => {
+    if (commentRef.current.value === "") return;
 
-    commentRef.current.value = "";
+    setLoading(true);
+
+    try {
+      const res = await axios.post(`http://localhost:3001/api/posts/${id}/comments`, {
+        userID: "6479d4d733b6e5f7e6ab3736",
+        commentText: commentRef.current.value,
+      })
+
+      console.log(res.data);
+      setComments([
+        ...comments,
+        {
+          username: 'Eren',
+          commentText: commentRef.current.value,
+          profilePicture: "eren.jpg"
+        }
+      ]);
+
+      commentRef.current.value = "";
+    }
+    catch (err) {
+      console.log(err);
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -321,9 +334,9 @@ const Post = () => {
                   {
                     comments.map((comment) => (
                       <Comment
-                        imgUrl={comment.imgSrc}
+                        imgUrl={`${process.env.PUBLIC_URL}/assets/${comment.profilePicture}`}
                         name={comment.username}
-                        text={comment.text}
+                        text={comment.commentText}
                       />
                     ))
                   }
