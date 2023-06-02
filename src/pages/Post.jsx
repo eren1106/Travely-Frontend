@@ -6,35 +6,62 @@ import StarIcon from '@mui/icons-material/Star';
 import SendIcon from '@mui/icons-material/Send';
 import Comment from '../components/Comment';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams, Redirect, Navigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const Post = () => {
   const { id } = useParams();
   const [showOption, setShowOption] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [postData, setPostData] = useState(null);
-
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      const res = await axios.get(`http://localhost:3001/api/posts/${id}`);
-      setPostData(res.data);
-      console.log(res.data);
-      setLoading(false);
+      setInitialLoading(true);
+
+      await fetchPostData();
+      await fetchUserRating();
+
+      setInitialLoading(false);
+    }
+
+    const fetchPostData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}`); // fetch post data
+        setPostData(res.data);
+        console.log(res.data);
+      }
+      catch (err) {
+        console.log(err);
+        navigate('/not-found');
+        return null;
+      }
+    }
+
+    const fetchUserRating = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`); // fetch post data
+        setRating(res.data.rating);
+        console.log(res.data.rating);
+      }
+      catch (err) {
+        console.log(err);
+      }
     }
 
     fetchData();
-  }, [id]);
+  }, [id, navigate]);
 
   const [descriptionEdit, setDescriptionEdit] = useState("");
   const [locationEdit, setLocationEdit] = useState("");
 
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [rating, setRating] = useState(0);
   const commentRef = useRef(null);
   const [comments, setComments] = useState([ // mock data
     {
@@ -81,20 +108,6 @@ const Post = () => {
     setShowDeleteAlert(false);
   };
 
-  const handleSaveEdit = () => {
-    if (descriptionEdit === "" || locationEdit === "") {
-      alert("Description and location cannot be empty");
-      return;
-    }
-
-    setPostData({
-      ...postData,
-      description: descriptionEdit,
-      location: locationEdit,
-    });
-    setIsEdit(false);
-  };
-
   const plusSlides = (n) => {
     let index = currentImageIndex + n;
     const len = postData.images.length
@@ -107,11 +120,6 @@ const Post = () => {
     setCurrentImageIndex(n);
   };
 
-  const deletePost = () => {
-    setShowDeleteAlert(false);
-    alert("Post deleted");
-  };
-
   const handleDescriptionChange = (e) => {
     setDescriptionEdit(e.target.value);
   }
@@ -120,13 +128,74 @@ const Post = () => {
     setLocationEdit(e.target.value);
   }
 
-  const handleClickStar = (n) => {
-    setRating(n);
+  const handleClickStar = async (n) => {
+    setLoading(true);
+
+    try{
+      const res = await axios.put(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`, {
+        rating: n,
+      });
+      console.log(res.data);
+      setRating(n);
+    }
+    catch(err) {
+      console.log(err);
+    }
+
+    setLoading(false);
   }
 
-  const handleRemoveRating = () => {
-    setRating(0);
+  const handleRemoveRating = async () => {
+    setLoading(true);
+
+    try{
+      const res = await axios.delete(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`);
+      console.log(res.data);
+      setRating(0);
+    }
+    catch(err) {
+      console.log(err);
+    }
+
+    setLoading(false);
   }
+
+  const handleSaveEdit = async () => {
+    if (descriptionEdit === "" || locationEdit === "") {
+      alert("Description and location cannot be empty");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.put(`http://localhost:3001/api/posts/${id}`, {
+        description: descriptionEdit,
+        location: locationEdit,
+      });
+      setPostData(res.data);
+      setIsEdit(false);
+    }
+    catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
+
+  const handleDeletePost = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.delete(`http://localhost:3001/api/posts/${id}`);
+      console.log(res.data);
+      navigate('/');
+    }
+    catch (err) {
+      console.log(err);
+    }
+
+    setLoading(false);
+    setShowDeleteAlert(false);
+    // TODO: show react toast
+  };
 
   const handleSubmitComment = () => {
     setComments([
@@ -144,12 +213,14 @@ const Post = () => {
   return (
     <div className={styles.postWrapper}>
       {
-        loading ? <CircularProgress /> :
+        initialLoading ? <CircularProgress /> :
           <div className={styles.mainContent}>
             <button className={`${styles.purpleBtn} ${styles.backBtn}`}>
               Back
             </button>
             <div className={styles.postPanel}>
+
+              {/* TOP SECTION */}
               <button className={`${styles.optionBtn} ${styles.iconWrapper}`} onClick={toggleShowOption}>
                 <MoreHorizIcon />
               </button>
@@ -165,6 +236,8 @@ const Post = () => {
                 </div>
               </section>
               <section className={styles.contentSection}>
+
+                {/* DESCRIPTION AND LOCATION */}
                 {isEdit ?
                   <textarea
                     value={descriptionEdit}
@@ -180,7 +253,7 @@ const Post = () => {
                   <PlaceIcon fontSize='small' />
                   {
                     isEdit ? <input
-                      value={postData.location}
+                      value={locationEdit}
                       className={styles.locationInput}
                       type="text"
                       onChange={handleLocationChange}
@@ -192,6 +265,8 @@ const Post = () => {
                   <button className={`${styles.saveBtn} ${styles.editBtn} ${styles.purpleBtn}`} onClick={handleSaveEdit}>Save</button>
                   <button className={`${styles.cancelBtn} ${styles.editBtn} ${styles.blueBtn}`} onClick={handleCloseEdit}>Cancel</button>
                 </div>}
+
+                {/* IMAGE SLIDES */}
                 <div className={styles.slideshowContainer}>
                   {
                     postData.images.map((image, index) =>
@@ -212,14 +287,19 @@ const Post = () => {
                     )
                   }
                 </div>
+
+                {/* POST STATISTIC */}
                 <div className={`${styles.ratingAndComments}`}>
                   <p className={`${styles.ratingText} ${styles.dataText}`}>4.5 average rating</p>
                   <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
                   <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
                 </div>
+
               </section>
               <hr />
+
               <section className={`${styles.bottomSection}`}>
+                {/* RATING SECTION */}
                 <div className={`${styles.ratingWrapper}`}>
                   <p>Give a rating:</p>
                   <div className={`${styles.ratingStars}`}>
@@ -235,6 +315,8 @@ const Post = () => {
                   </div>
                   {rating > 0 && <button className={`${styles.clearBtn} ${styles.purpleBtn}`} onClick={() => handleRemoveRating()} >Clear Rating</button>}
                 </div>
+
+                {/* COMMENT SECTION */}
                 <div className={`${styles.commentList}`}>
                   {
                     comments.map((comment) => (
@@ -254,20 +336,25 @@ const Post = () => {
                   </button>
                 </div>
               </section>
-              {
-                showDeleteAlert && <div className={`${styles.confirmModal} ${styles.popUpModal}`}>
-                  <div className={`${styles.modalContent}`}>
-                    <p className={`${styles.modalText}`}>Are you sure you want to delete this post?</p>
-                    <div className={`${styles.modalButtons}`}>
-                      <button className={`${styles.confirmDeleteBtn} ${styles.modalBtn} ${styles.purpleBtn}`} onClick={deletePost}>Yes</button>
-                      <button className={`${styles.cancelDeleteBtn} cancelDeleteBtn ${styles.modalBtn} ${styles.blueBtn}`} onClick={closeDelete}>No</button>
-                    </div>
-                  </div>
-                </div>
-              }
             </div>
           </div>
       }
+
+      {/* DELETE ALERT POP UP */}
+      {
+        showDeleteAlert && <div className={`${styles.confirmModal} ${styles.popUpModal}`}>
+          <div className={`${styles.modalContent}`}>
+            <p className={`${styles.modalText}`}>Are you sure you want to delete this post?</p>
+            <div className={`${styles.modalButtons}`}>
+              <button className={`${styles.confirmDeleteBtn} ${styles.modalBtn} ${styles.purpleBtn}`} onClick={handleDeletePost}>Yes</button>
+              <button className={`${styles.cancelDeleteBtn} cancelDeleteBtn ${styles.modalBtn} ${styles.blueBtn}`} onClick={closeDelete}>No</button>
+            </div>
+          </div>
+        </div>
+      }
+
+      {/* LOADING OVERLAY */}
+      <LoadingOverlay loading={loading} />
     </div>
   );
 };
