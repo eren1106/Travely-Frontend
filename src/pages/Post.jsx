@@ -9,6 +9,9 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import LoadingOverlay from '../components/LoadingOverlay';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const Post = () => {
   const { id } = useParams();
@@ -18,6 +21,7 @@ const Post = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState(0);
+  const [userRating, setUserRating] = useState(0);
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
@@ -26,6 +30,7 @@ const Post = () => {
       setInitialLoading(true);
 
       await fetchPostData();
+      await fetchRating();
       await fetchUserRating();
       await fetchComments();
 
@@ -45,10 +50,25 @@ const Post = () => {
       }
     }
 
+    const fetchRating = async () => {
+      try{
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/rating`);
+        const rates = res.data;
+        console.log("RATES", rates);
+        var sum = rates.reduce((total, rate) => total + rate.rating, 0);
+        var average = sum / rates.length;
+        console.log("AVERAGE", average);
+        setRating(average);
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
+
     const fetchUserRating = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`); // fetch post data
-        setRating(res.data.rating);
+        setUserRating(res.data.rating);
         console.log(res.data.rating);
       }
       catch (err) {
@@ -132,7 +152,7 @@ const Post = () => {
         rating: n,
       });
       console.log(res.data);
-      setRating(n);
+      setUserRating(n);
     }
     catch (err) {
       console.log(err);
@@ -147,7 +167,7 @@ const Post = () => {
     try {
       const res = await axios.delete(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`);
       console.log(res.data);
-      setRating(0);
+      setUserRating(0);
     }
     catch (err) {
       console.log(err);
@@ -303,9 +323,18 @@ const Post = () => {
 
                 {/* POST STATISTIC */}
                 <div className={`${styles.ratingAndComments}`}>
-                  <p className={`${styles.ratingText} ${styles.dataText}`}>4.5 average rating</p>
-                  <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
-                  <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
+                  <div className={styles.dataDiv}>
+                    <StarBorderIcon fontSize="small" />
+                    <p className={`${styles.ratingText} ${styles.dataText}`}>{`${rating} average rating`}</p>
+                  </div>
+                  <div className={styles.dataDiv}>
+                    <ChatBubbleOutlineIcon fontSize="small" />
+                    <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
+                  </div>
+                  <div className={styles.dataDiv}>
+                    <RemoveRedEyeIcon fontSize="small" />
+                    <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
+                  </div>
                 </div>
 
               </section>
@@ -320,13 +349,13 @@ const Post = () => {
                       starIcons.map((_, i) => (
                         <StarIcon
                           key={i}
-                          className={`${styles.ratingStar} ${i < rating && styles.selected}`}
+                          className={`${styles.ratingStar} ${i < userRating && styles.selected}`}
                           onClick={() => handleClickStar(i + 1)}
                         />
                       ))
                     }
                   </div>
-                  {rating > 0 && <button className={`${styles.clearBtn} ${styles.purpleBtn}`} onClick={() => handleRemoveRating()} >Clear Rating</button>}
+                  {userRating > 0 && <button className={`${styles.clearBtn} ${styles.purpleBtn}`} onClick={() => handleRemoveRating()} >Clear Rating</button>}
                 </div>
 
                 {/* COMMENT SECTION */}

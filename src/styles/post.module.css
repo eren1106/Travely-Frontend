@@ -150,6 +150,12 @@
   gap: 20px;
 }
 
+.dataDiv {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .dataText {
   color: var(--grey-text);
   font-size: 14px;
