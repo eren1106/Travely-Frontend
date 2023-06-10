@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './analytics.css';
-import ViewsChart from './ViewsChart';
-import PostReach from './PostReach';
+import '../styles/analytics.css';
+import ViewsChart from '../components/ViewsChart';
+import PostReach from '../components/PostReach';
 
 const Travely = () => {
   const [selectedView, setSelectedView] = useState('month'); 
@@ -177,14 +177,6 @@ const Travely = () => {
           </div>
         </div>
       </main>
-
-      <script src="https://kit.fontawesome.com/27fa9359fc.js" crossorigin="anonymous"></script>
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-      <script type="text/javascript" src="component/chart/line-chart.js"></script>
-      <script type="text/javascript" src="component/chart/column-chart.js"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-      <script type="text/javascript" src="component/chart/graphs.js"></script>
     </div>
   );
 }
