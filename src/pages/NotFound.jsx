@@ -1,23 +1,28 @@
 import React from 'react'
-import styles from '../styles/notFound.css';
+import styles from '../styles/notFound.module.css';
+import { Link } from 'react-router-dom';
 
-const NotFound = () => {
+
+
+const NotFound = props => {
   return (
-    <div className="slider-area"> 
-        <div className="slider-content">
-            <div className="row">
-                <div className="col-md-6 mx-auto text-center">
-                    <img className="img-fluid" src="assets/404.png" alt="" />
+    <div className={styles.body404}>
+    <div className={styles.sliderArea}> 
+        <div className={styles.sliderContent}>
+            <div className={styles.row}>
+                <div className={styles.notFoundContent}>
+                    <img className={styles.imgFluid} src="assets/404.png" alt="" />
                     <br />
                     <br />
-                    <h2 className="h2">Oops! </h2>
+                    <h2 className={styles.h2}>Oops! </h2>
                     <p>We're sorry, <br />
                         The page you were looking for doesn't exist anymore.
                     </p>
-                    <a className="btn shuvo-btn" href="#"> Back to Home</a>
+                    <Link to="/" className={styles.shuvoBtn} href="#"> Back to Home</Link>
                 </div> 
             </div>
         </div>
+    </div>
     </div>
   )
 }
