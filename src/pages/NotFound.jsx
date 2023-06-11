@@ -7,7 +7,7 @@ const NotFound = () => {
         <div className="slider-content">
             <div className="row">
                 <div className="col-md-6 mx-auto text-center">
-                    <img className="img-fluid" src="static/picture/4042.png" alt="" />
+                    <img className="img-fluid" src="assets/404.png" alt="" />
                     <br />
                     <br />
                     <h2 className="h2">Oops! </h2>

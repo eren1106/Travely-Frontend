@@ -13,7 +13,7 @@ a {
 .slider-area {
     position: relative; 
     height: 100vh;
-    background-image: url(../image/background-1.png);
+    background-image: url(../../public/assets/background-1.png);
     background-size: cover;
     background-position: center;
 } 
