@@ -1,81 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import axios from 'axios';
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement);
 
 const ViewsChart = () => {
   const [selectedView, setSelectedView] = useState('month'); // Default selected view is 'month'
+  const [chartData, setChartData] = useState({ labels: [], data: [] });
 
-  const days = [
-    { x: Date.parse('2023-04-01 00:00:00 GMT+0800'), y: 5 },
-    { x: Date.parse('2023-04-02 00:00:00 GMT+0800'), y: 20 },
-    { x: Date.parse('2023-04-03 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-04-04 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-04-05 00:00:00 GMT+0800'), y: 20 },
-    { x: Date.parse('2023-04-06 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-04-07 00:00:00 GMT+0800'), y: 10 },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, [selectedView]);
 
-  const weeks = [
-    { x: Date.parse('2023-04-02 00:00:00 GMT+0800'), y: 90 },
-    { x: Date.parse('2023-04-09 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-04-16 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-04-23 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-04-30 00:00:00 GMT+0800'), y: 30 },
-  ];
-
-  const months = [
-    { x: Date.parse('2023-01-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-02-01 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-03-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-04-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-05-01 00:00:00 GMT+0800'), y: 40 },
-    { x: Date.parse('2023-06-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-07-01 00:00:00 GMT+0800'), y: 20 },
-    { x: Date.parse('2023-08-01 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-09-01 00:00:00 GMT+0800'), y: 70 },
-    { x: Date.parse('2023-10-01 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-11-01 00:00:00 GMT+0800'), y: 70 },
-    { x: Date.parse('2023-12-01 00:00:00 GMT+0800'), y: 20 },
-  ];
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`/api/views?view=${selectedView}`);
+      const { labels, data } = response.data;
+      setChartData({ labels, data });
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  };
 
   const handleViewChange = (event) => {
     setSelectedView(event.target.value);
   };
 
-
   const getLabels = () => {
-    switch (selectedView) {
-      case 'day':
-        return days.map(day => {
-          const date = new Date(day.x);
-          return date.toLocaleDateString('default', { month: 'short', day: 'numeric' });
-        });
-      case 'week':
-        return weeks.map(week => {
-          const date = new Date(week.x);
-          return date.toLocaleDateString('default', { month: 'short', day: 'numeric' });
-        });
-      case 'month':
-      default:
-        return months.map(month => {
-          const date = new Date(month.x);
-          return date.toLocaleString('default', { month: 'short' });
-        });
-    }
+    return chartData.labels.map((x) => {
+      const date = new Date(x);
+      if (selectedView === 'day') {
+        return date.toLocaleDateString('default', { month: 'short', day: 'numeric' });
+      } else if (selectedView === 'week') {
+        return date.toLocaleDateString('default', { month: 'short', day: 'numeric' });
+      } else {
+        return date.toLocaleString('default', { month: 'short' });
+      }
+    });
   };
 
   const getData = () => {
-    switch (selectedView) {
-      case 'day':
-        return days.map(day => day.y);
-      case 'week':
-        return weeks.map(week => week.y);
-      case 'month':
-      default:
-        return months.map(month => month.y);
-    }
+    return chartData.data;
   };
 
   const data = {
@@ -110,7 +76,7 @@ const ViewsChart = () => {
   return (
     <div>
       <div>
-      <label htmlFor="viewSelect">View By: </label>
+        <label htmlFor="viewSelect">View By: </label>
         <select id="viewSelect" value={selectedView} onChange={handleViewChange}>
           <option value="day">Day</option>
           <option value="week">Week</option>
@@ -118,8 +84,8 @@ const ViewsChart = () => {
         </select>
       </div>
       <div>
-      <Line data={data} height={400} options={options} />
-    </div>
+        <Line data={data} height={400} options={options} />
+      </div>
     </div>
   );
 };

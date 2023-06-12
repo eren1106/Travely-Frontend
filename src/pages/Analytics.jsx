@@ -1,13 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/analytics.css';
 import ViewsChart from '../components/ViewsChart';
 import PostReach from '../components/PostReach';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const Travely = () => {
-  const [selectedView, setSelectedView] = useState('month'); 
-  const handleViewChange = (event) => {
-    setSelectedView(event.target.value);
-  };
+  const { id } = useParams();
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [postData, setPostData] = useState(null);
+  const [visitors, setVisitors] = useState(0);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setInitialLoading(true);
+
+      try {
+        await fetchPostData();
+        await fetchRating();
+        await fetchVisitors();
+        await fetchTotalPosts();
+      } catch (err) {
+        console.log(err);
+      }
+
+      setInitialLoading(false);
+    };
+
+    const fetchPostData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}`);
+        setPostData(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const fetchVisitors = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/visitors`);
+        setVisitors(res.data.visitors);
+        console.log(res.data.visitors);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const fetchTotalPosts = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/totalPosts`);
+        setTotalPosts(res.data.totalPosts);
+        console.log(res.data.totalPosts);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const fetchRating = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`);
+        setRating(res.data.rating);
+        console.log(res.data.rating);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   return (
     <div>
@@ -20,7 +83,7 @@ const Travely = () => {
               </div>
               <div className="content">
                 <p className="total">Visitors (Today)</p>
-                <p className="num">1000</p>
+                <p className="num">{visitors}</p>
               </div>
             </div>
             <div className="column">
@@ -29,7 +92,7 @@ const Travely = () => {
               </div>
               <div className="content">
                 <p className="total">Total Posts</p>
-                <p className="num">14,567</p>
+                <p className="num">{totalPosts}</p>
               </div>
             </div>
             <div className="column">
@@ -38,7 +101,7 @@ const Travely = () => {
               </div>
               <div className="content">
                 <p className="total">Rating</p>
-                <p className="num">4.0/5.0</p>
+                <p className="num">{rating}/5.0</p>
               </div>
             </div>
           </div>
@@ -50,7 +113,7 @@ const Travely = () => {
                   <p className="title">View Reach</p>
                 </div>
                 <div>
-                <ViewsChart selectedView={selectedView} />
+                  <ViewsChart />
                 </div>
               </div>
             </div>
@@ -63,7 +126,7 @@ const Travely = () => {
                   <p className="title">Post Reach</p>
                 </div>
                 <div>
-                  <PostReach/>
+                  <PostReach />
                 </div>
               </div>
             </div>
@@ -93,78 +156,27 @@ const Travely = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <div className="list-of-post">
-                        <p className="text">01</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/Bali.jpeg" alt="" />
+                {postData &&
+                  postData.map((post, index) => (
+                    <tr key={post.id}>
+                      <td>
+                        <div className="number-of-post">
+                          <p className="text">{index + 1}</p>
                         </div>
-                        <p className="title-of-post">Discover the Magic of Bali: A Journey to Paradise.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">5.0/5.0</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="number-of-post">
-                        <p className="text">02</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/balloonView.jpg" alt="" />
+                      </td>
+                      <td>
+                        <div className="posts">
+                          <div className="image">
+                            <img src={post.image} alt="" />
+                          </div>
+                          <p className="title-of-post">{post.title}</p>
                         </div>
-                        <p className="title-of-post">Explore the Rich History and Culture of Turkey: A Journey to the Crossroads of East and West.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">4.9/5.0</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="number-of-post">
-                        <p className="text">03</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/china-scene.jpg" alt="" />
-                        </div>
-                        <p className="title-of-post">Journey through Time and Tradition: Experience the Wonders of China.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">4.5/5.0</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="number-of-post">
-                        <p className="text">04</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/australia-scene.jpeg" alt="" />
-                        </div>
-                        <p className="title-of-post">Adventure Down Under: Discovering the Natural Wonders of Australia.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">4.3/5.0</p>
-                    </td>
-                  </tr>
+                      </td>
+                      <td>
+                        <p className="text">{post.rating}/5.0</p>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
