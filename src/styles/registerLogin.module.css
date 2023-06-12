@@ -1,16 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 
-* {
+.loginContainer {
     padding: 0; /* eliminate all margin and padding first */
     margin: 0;
     box-sizing: border-box; /* include any border and papdding */
 }
 
-body, input {
+.loginContainer, input {
     font-family: 'Poppins', sans-serif;
 }
 
-.container {
+.registerLoginBody {
     position: relative; /* relative position */
     width: 100%;
     min-height: 100vh; /* minimum height of an element */
@@ -19,29 +19,38 @@ body, input {
     overflow: hidden;
 }
 
-.panels-container {
+.loginContainer {
+    position: relative; /* relative position */
+    width: 100%;
+    min-height: 100vh; /* minimum height of an element */
+    /* occupy 100 percent of the web browser's viewport height */
+    background-color: #D8F0FA;
+    overflow: hidden;
+}
+
+.panelsContainer {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: url(../assets/ali-test.svg);
+    background-image: url(../../public/assets/ali-test.svg);
     /* background-image: url(../assets/world.svg); */
     background-repeat: no-repeat;
     background-position: -1000px top;
     z-index: 1;
 }
 
-.panels-top-container {
+.panelsTopContainer {
     position: absolute;
     width: 60%;
     height: 100%;
-    background-image: url(../assets/travelers.svg);
+    background-image: url(../../public/assets/travelers.svg);
     /* background-image: url(../assets/world.svg); */
     background-repeat: no-repeat;
     background-position: bottom center;
     z-index: 1;
 }
 
-.form-container {
+.formContainer {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -49,7 +58,7 @@ body, input {
     left: 0;
 }
 
-.signin-signup {
+.signinSignup {
     position: absolute;
     top: 15%;
     left: 50%;
@@ -57,7 +66,7 @@ body, input {
     z-index: 2;
 }
 
-.sign-up-group {
+.signUpGroup {
     top: 10%;
 }
 
@@ -73,7 +82,7 @@ form {
     margin-bottom: 10px;
 }
 
-.input-field {
+.inputField {
     max-width: 380px;
     width: 100%;
     height: 55px;
@@ -86,14 +95,14 @@ form {
     padding: 0 .7rem;
 }
 
-.input-field i {
+.inputField i {
     text-align: center;
     line-height: 55px; /* make it center */
     color: #acacac;
     font-size: 1.1rem;
 }
 
-.input-field input {
+.inputField input {
     background: none;
     border: none; /* normal border*/
     outline: none; /* border when click */
@@ -105,7 +114,7 @@ form {
 
 
 
-.input-field input::placeholder {
+.inputField input::placeholder {
     color: #aaa;
     font-weight: 500;
 }
@@ -129,26 +138,26 @@ form {
     background-color: #9146FF;
 }
 
-.social-text,
-.signin-signup-text {
+.socialText,
+.signiSignupText {
     padding: .7rem 0;
     font-size: 1.1rem;
 }
 
-.social-media,
-.signin-signup-link {
+.socialMedia,
+.signinSignupLink {
     display: flex;
     justify-content: center;
 }
-.forget-password-link {
+.forgetPasswordLink {
     display: flex;
     justify-content: end;
 }
-.signin-signup-link {
+.signinSignupLink {
     margin-top: 10px;
 }
 
-.social-icon {
+.socialIcon {
     height: 46px;
     width: 46px;
     font-size: 1.1rem;
@@ -162,15 +171,15 @@ form {
     border-radius: 46px;;
 }
 
-.social-icon:hover {
+.socialIcon:hover {
     color: #9146FF;
     border-color: #4481eb;
 }
 
 @media (max-width: 1500px) {
 
-    .panels-container,
-    .panels-top-container {
+    .panelsContainer,
+    .panelsTopContainer {
         /* width: 50%; */
         /* background-image: none; */
         /* transform: translate(-20%, 0%); */
@@ -179,7 +188,7 @@ form {
         /* transition: .3s .3s ease-in-out; */
     }
 
-    /* .panels-container:before {
+    /* .panelsContainer:before {
         transform: translate(-10%, 0%);
         transition: .5s 0.4s ease-in-out;
     } */
@@ -187,8 +196,8 @@ form {
 
 @media (max-width: 1300px) {
 
-    .panels-container,
-    .panels-top-container {
+    .panelsContainer,
+    .panelsTopContainer {
         width: 100%;
         /* background-image: none; */
         /* transform: translate(-40%, 0%); */
@@ -200,8 +209,8 @@ form {
 
 @media (max-width: 1000px) {
 
-    .panels-container,
-    .panels-top-container {
+    .panelsContainer,
+    .panelsTopContainer {
         /* background-image: none; */
         transform: translate(-40%, 0%);
         /* background-position: -1400px center; */
@@ -215,23 +224,23 @@ form {
       min-height: 800px;
       height: 100vh;
     }
-    .signin-signup {
+    .signinSignup {
       width: 100%;
       top: 80%;
       transform: translate(-50%, -100%);
       /* transition: .5s 0.4s ease-in-out; */
     }
   
-    .signin-signup,
-    .container.sign-up-mode .signin-signup {
+    .signiSignup,
+    .container.signUpMode .signinSignup {
       left: 50%;
     }
 
-    .panels-container {
+    .panelsContainer {
         background-image: none;
     }
 
-    .panels-top-container {
+    .panelsTopContainer {
         background-image: none;
     }
 }
