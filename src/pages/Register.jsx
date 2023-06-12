@@ -18,9 +18,9 @@ const Register = () => {
             // Continue with register logic
             navigate('/');
         } catch (error) {
-            console.error('Registration failed!');
-            console.error(error.response.data);
             // Handle error response
+            console.error('Registration failed!');
+            // console.error(error.response.data);
         }
     };
 

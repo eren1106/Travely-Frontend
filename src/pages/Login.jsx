@@ -20,9 +20,9 @@ const Login = () => {
       // localStorage.setItem('user_id', res.data.id);
       navigate('/');
     } catch (error) {
-      console.log("error occurs!");
-      console.error(error.response.data);
       // Handle error response
+      console.log("error occurs!");
+      // console.error(error.response.data);
     }
   };
 
