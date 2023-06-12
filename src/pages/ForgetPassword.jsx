@@ -11,20 +11,31 @@ const ForgetPassword = () => {
   const { handleSubmit, register, formState: { errors } } = useForm();
 
   const handlePasswordReset = async (data) => {
-    try {
-      const response = await axios.post('http://localhost:3001/api/auth/resetPassword', data);
-      console.log("reset password successfully!");
-      console.log(response.data);
-      // Perform password reset logic
-      console.log('Password reset form submitted:', data);
-      alert("Password reset successfully! Please login again!");
-      navigate('/login');
-    } catch (error) {
-      // Handle error response
-      console.log("error occurs!");
-      // console.error(error.response.data);
+    if(data.newPassword !== data.confirmPassword){
+      alert("Passwords do not match! Please key in again!");
+    }else{
+      try {
+        const response = await axios.post('http://localhost:3001/api/auth/resetPassword', data);
+        console.log("reset password successfully!");
+        console.log(response.data);
+        // Perform password reset logic
+        console.log('Password reset form submitted:', data);
+        alert("Password reset successfully! Please login again!");
+        navigate('/login');
+      } catch (error) {
+        // Handle error response
+        console.log("error occurs!");
+        // console.error(error.response.data);
+      }
     }
   };
+
+  const validatePassword = (e) => {
+    if(e.target.value.length <= 6){
+        alert("Password must exceed length of 6!")
+        e.target.value = '';
+    }
+  }
 
 
   return (
@@ -40,7 +51,7 @@ const ForgetPassword = () => {
                         </div>
                         <div className={styles.inputField}>
                             <i className="fas fa-lock"></i>
-                            <input type="password" {...register('newPassword')} placeholder="New Password" required />
+                            <input type="password" {...register('newPassword')} onBlur={validatePassword} placeholder="New Password" required />
                         </div>
                         <div className={styles.inputField}>
                             <i className="fas fa-lock"></i>
