@@ -5,8 +5,10 @@ import PostText from "./PostText"
 import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
-
+import { useNavigate } from "react-router-dom";
 const PostCard = (props) => {
+
+  const navigate = useNavigate();
 
   // render stars
   const renderStars = (rating) => {
@@ -30,11 +32,14 @@ const PostCard = (props) => {
   
     return stars;
   };
-
-  
+ 
+  //navigate to post page
+  const handleClick = () =>{
+    navigate(`/post/${props.postID}`);
+  }
   return (    
     <div className={styles.singleUserPostContainer}>
-      <UserProfile username={props.username} location={props.location} datetime={props.date} />
+      <UserProfile profile={props.profile} username={props.username} location={props.location} datetime={props.date} />
       <PostText description={props.description}/>
       <div className={styles.imageContainer}>
           <img className={styles.postImg}src={props.postimg}/>
@@ -48,7 +53,7 @@ const PostCard = (props) => {
         </div>
       </div>
       <div className={styles.navContainer}>
-        <a className={styles.iconList}>
+        <a className={styles.iconList} onClick={handleClick}>
           <li>Read full Article<i><ArrowForwardOutlinedIcon/></i></li>
         </a>
       </div>

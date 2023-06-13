@@ -1,16 +1,20 @@
 import React from "react";
 import styles from "../styles/userprofile.module.css";
-import defaultProfile from "../assets/defaultProfile.jpeg";
+
 const UserProfile = (props) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  //check user profile exists
+  let defaultImg = ""
+  if (props.profile.length === 0 ) {
+    defaultImg = "defaultProfile.jpeg";
+  }else {
+    defaultImg = props.profile;
+  }
   return (
     <div className={styles.profileNameContainer}>
       <img
-        src={
-          props.coverPicture
-            ? PF + props.coverPicture
-            : {defaultProfile}
-        }
+        src={PF + defaultImg}
       />
       <div>
         <p>{props.username}</p>

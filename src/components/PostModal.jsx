@@ -150,9 +150,9 @@ const PostModal = (props) => {
             <CloseOutlinedIcon />
           </i>
           <div className={`${styles.profileText}`}>
-            <img className={`${styles.profileImg}`} src={img} alt="" />
+            <img className={`${styles.profileImg}`} src={props.userprofile} alt="" />
             <div className={`${styles.text}`}>
-              <span className={`${styles.name}`}>Zheng Wu Bang</span>
+              <span className={`${styles.name}`}>{props.username}</span>
             </div>
           </div>
           <form onSubmit={handleSubmit} encType="multipart/form-data">

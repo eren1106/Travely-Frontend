@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import styles from "../styles/createpost.module.css";
-import profile from "../assets/profile.jpg";
 import PostModal from "../components/PostModal";
-const CreatePost = () => {
+import { CircularProgress } from "@mui/material";
+
+const CreatePost = (props) => {
   const [modal, setModal] = useState(false);
 
   const handleClickChange = () => {
@@ -13,13 +14,13 @@ const CreatePost = () => {
     <>
       <div className={styles.writePostContainer}>
         <div className={styles.profileNameContainer}>
-          <img src={profile} />
+          {props.loading ? <CircularProgress/> : <img src={props.profile} />}
         </div>
         <div className={styles.placeholderContainer} onClick={handleClickChange}>
           <p className={styles.placeholderText}>What's on your mind?</p>
         </div>
       </div>
-      {modal ? <PostModal close={handleClickChange} /> : ""}
+      {modal ? <PostModal userprofile={props.profile}  username={props.username} close={handleClickChange} /> : ""}
     </>
   );
 };
