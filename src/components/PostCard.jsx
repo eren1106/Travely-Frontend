@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import styles from "../styles/postcard.module.css"
 import UserProfile from "./PostUserProfile";
 import PostText from "./PostText"
-import profile from "../assets/switzerland-scene.jpg"
 import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
@@ -38,7 +37,7 @@ const PostCard = (props) => {
       <UserProfile username={props.username} location={props.location} datetime={props.date} />
       <PostText description={props.description}/>
       <div className={styles.imageContainer}>
-          <img src={props.img}/>
+          <img src={props.postimg}/>
       </div>
       <hr className={styles.lineBreak} />
       <div className={styles.userRating}>

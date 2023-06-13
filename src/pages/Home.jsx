@@ -6,6 +6,9 @@ import TopBar from "../components/Topbar";
 import CreatePost from "../components/CreatePost";
 import styles from "../styles/home.module.css";
 import PostCard from "../components/PostCard";
+import { CircularProgress } from '@mui/material';
+import LoadingOverlay from "../components/LoadingOverlay";
+
 const Home = () => {
   const [posts, setPosts] = useState([]);
 
@@ -15,6 +18,7 @@ const Home = () => {
   const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
   
   const getPosts = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get("http://localhost:3001/api/posts");
       const posts = response.data;
@@ -25,6 +29,7 @@ const Home = () => {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
         })
       );
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -39,17 +44,20 @@ const Home = () => {
       <TopBar />
       <CreatePost />
       <div className={styles.postContainer}>
-        {posts.map((post) => (
+        {
+        posts.map((post) => (
           <PostCard
             key={post.postID}
             username={post.username}
             location={post.location}
             rating={post.rating}
             description={post.description}
-            img={PUBLIC_FOLDER + post.images}
+            postimg={PUBLIC_FOLDER + post.images}
             date={post.createdAt}
           />
         ))}
+        {/* LOADING OVERLAY */}
+      <LoadingOverlay loading={isLoading} />
       </div>
     </div>
   );
