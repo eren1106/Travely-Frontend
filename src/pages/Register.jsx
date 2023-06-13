@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
 
 const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -40,7 +45,7 @@ const Register = () => {
                         <form onSubmit={handleSubmit(handleRegister)} id="register-form" autoComplete="off">
                             <h2 className={styles.title}>Sign up to Travely</h2>
                             <div className={styles.inputField}>
-                                <i className="fas fa-user"></i>
+                              <i><PersonOutlinedIcon/></i>
                                 <input
                                 type="text"
                                 {...register('username')}
@@ -49,11 +54,11 @@ const Register = () => {
                             </div>
                             
                             <div className={styles.inputField}>
-                                <i className="fas fa-user"></i>
+                              <i><MailOutlinedIcon/></i>
                                 <input type="email" {...register('email')} placeholder="Email" required />
                             </div>
                             <div className={styles.inputField}>
-                                <i className="fas fa-lock"></i>
+                              <i><LockOutlinedIcon/></i>
                                 <input 
                                 type="password" 
                                 {...register('password')}
@@ -63,19 +68,20 @@ const Register = () => {
                                 {errors.password && <span>Password is required</span>}
                             </div>
                             <div className={styles.inputField}>
-                                <i className="fas fa-lock"></i>
+                              <i><LockOutlinedIcon/></i>
                                 <input type="password" {...register('confirmPassword')} placeholder="Confirm Password" required />
                             </div>
                             
                             {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                             <input type="submit" value="Register" className={`${styles.btn} ${styles.solid}`} id="sign-up-btn" />
                             <p className={styles.socialText}>Or Sign up With</p>
+                            
                             <div className={styles.socialMedia}>
                                 <a href="#" className={styles.socialIcon}>
-                                    <i className="fab fa-facebook-f"></i>
+                                    <i><FacebookOutlinedIcon/></i>
                                 </a>
                                 <a href="#" className={styles.socialIcon}>
-                                    <i className="fab fa-google"></i>
+                                    <i><GoogleIcon/></i>
                                 </a>
                             </div>
                             <div className={styles.signinSignupLink}>

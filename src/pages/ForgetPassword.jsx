@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const ForgetPassword = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -50,15 +52,15 @@ const ForgetPassword = () => {
                     <form onSubmit={handleSubmit(handlePasswordReset)} className={styles.signInForm} id="password-reset-form" autoComplete="off">
                         <h2 className={styles.title}>Reset Password</h2>
                         <div className={styles.inputField}>
-                            <i className="fas fa-user"></i>
+                            <i><MailOutlinedIcon/></i>
                             <input type="text" {...register('email')} placeholder="Email" required />
                         </div>
                         <div className={styles.inputField}>
-                            <i className="fas fa-lock"></i>
+                            <i><LockOutlinedIcon/></i>
                             <input type="password" {...register('newPassword')} placeholder="New Password" required />
                         </div>
                         <div className={styles.inputField}>
-                            <i className="fas fa-lock"></i>
+                            <i><LockOutlinedIcon/></i>
                             <input type="password" {...register('confirmPassword')} placeholder="Confirm Password" required />
                         </div>
                         <div className={styles.backToLoginLink}>

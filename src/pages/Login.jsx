@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
+
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -42,7 +48,7 @@ const Login = () => {
             <form onSubmit={handleSubmit(handleLogin)} className={styles.signInForm} id="login-form" autoComplete="off">
               <h2 className={styles.title}>Sign in to Travely</h2>
               <div className={styles.inputField}>
-                <i className="fas fa-user"></i>
+                <i><MailOutlinedIcon/></i>
                 <input
                   type="email"
                   {...register('email')}
@@ -51,7 +57,7 @@ const Login = () => {
                 />
               </div>
               <div className={styles.inputField}>
-                <i className="fas fa-lock"></i>
+                <i><LockOutlinedIcon/></i>
                 <input
                   type="password"
                   {...register('password')}
@@ -68,12 +74,13 @@ const Login = () => {
               <input type="submit" value="Login" className={`${styles.btn} ${styles.solid}`}/>
               
               <p className={styles.socialText}>Or Sign in With</p>
+              
               <div className={styles.socialMedia}>
-                <a href="country.html" className={styles.socialIcon}>
-                  <i className="fab fa-facebook-f"></i>
+                <a href="#" className={styles.socialIcon}>
+                  <i><FacebookOutlinedIcon/></i>
                 </a>
-                <a href="country.html" className={styles.socialIcon}>
-                  <i className="fab fa-google"></i>
+                <a href="#" className={styles.socialIcon}>
+                  <i><GoogleIcon/></i>
                 </a>
               </div>
               <div className={styles.signinSignupLink}>
