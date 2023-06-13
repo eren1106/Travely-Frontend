@@ -1,0 +1,168 @@
+.section{ 
+    position: absolute;
+    left: 20em;
+    top: 5em;
+    width: 80%;
+    padding: 20px;
+}
+
+.column {
+  display: flex;
+  background-color: white;
+  border-radius: 6px;
+  padding: 25px;
+  margin: 15px;
+  float: left;
+  width: 25%;
+  box-shadow: 5px 5px 5px 1px rgb(176, 176, 176);
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+}
+
+.icon1{
+  background-color: rgba(155, 81, 224, 0.1);
+  border-radius: 6px;
+}
+.icon2{
+  background-color:rgba(33, 150, 83, 0.1) ;
+  border-radius: 6px; 
+
+}
+.icon3{
+  background-color: rgba(74, 108, 247, 0.1);
+  border-radius: 6px;
+}
+.icon4{
+  background-color: rgba(242, 153, 74, 0.1);
+  border-radius: 6px;
+}
+
+.container{
+  background-color: white;
+  border-radius: 6px;
+  padding: 20px;
+  margin: 15px;
+  margin-bottom: 50px;
+  width: 80%;
+  box-shadow: 5px 5px 5px 1px rgb(176, 176, 176);
+}
+
+.content{
+  padding-left: 20px;
+}
+
+.num{
+  font-size:30px;
+  font-weight: 300;
+}
+
+.total{
+  font-size: 13px;
+  font-weight:600;
+  padding-bottom: 5px;
+}
+
+.title{
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.table-top-posts{
+  margin: 10px;
+  padding: 20px;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse; 
+}
+
+thead{
+  height: 50px;
+  text-align: center;
+ 
+}
+
+th, td{
+  border-bottom: 1px solid #ddd;
+  height: 10px;
+}
+
+tr:hover {background-color: #ded7fb;}
+
+.posts{
+  display: flex;
+  padding: 20px;
+}
+
+.title-of-post{
+  margin-left: 20px;
+  padding-top: 20px;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.text{
+  text-align: center;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.title-table{
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+img{
+  width:60px ;
+  height:60px;
+}
+
+
+.view-more{
+  color: blue;
+  font-weight: 500;
+}
+
+.col-view-more{
+  width: 95%;
+  text-align:end;
+}
+
+.view-more:hover {
+  text-decoration: underline;
+}
+
+.select{
+  width: 85%;
+  text-align:end;
+}
+
+select{
+  border-radius: 10px;
+  box-shadow: 1px 1px 0px 0px rgb(176, 176, 176);
+  font-size: 15px;
+  margin: 5px;
+  padding:5px;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+.column {
+      width: 100%;
+    }
+.view-reach{
+  width: 100%;
+    }
+}
+
+
+
