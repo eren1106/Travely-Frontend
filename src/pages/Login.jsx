@@ -22,6 +22,7 @@ const Login = () => {
     } catch (error) {
       // Handle error response
       console.log("error occurs!");
+      alert(error.response.data);
       // console.error(error.response.data);
     }
   };

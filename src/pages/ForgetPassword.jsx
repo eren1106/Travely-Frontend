@@ -11,7 +11,9 @@ const ForgetPassword = () => {
   const { handleSubmit, register, formState: { errors } } = useForm();
 
   const handlePasswordReset = async (data) => {
-    if(data.newPassword !== data.confirmPassword){
+    if(data && data.newPassword && data.newPassword.length < 6){
+      alert("Password must exceed length of 6!");
+    }else if(data.newPassword !== data.confirmPassword){
       alert("Passwords do not match! Please key in again!");
     }else{
       try {
@@ -31,7 +33,7 @@ const ForgetPassword = () => {
   };
 
   const validatePassword = (e) => {
-    if(e.target.value.length <= 6){
+    if(e.target.value.length < 6){
         alert("Password must exceed length of 6!")
         e.target.value = '';
     }
@@ -43,7 +45,7 @@ const ForgetPassword = () => {
         <div className={styles.loginContainer}>
             <div className={styles.formContainer}>
                 <div className={styles.signinSignup}>
-                    <form onSubmit={handleSubmit(handlePasswordReset)} className={styles.signInForm} id="password-reset-form" autocomplete="off">
+                    <form onSubmit={handleSubmit(handlePasswordReset)} className={styles.signInForm} id="password-reset-form" autoComplete="off">
                         <h2 className={styles.title}>Reset Password</h2>
                         <div className={styles.inputField}>
                             <i className="fas fa-user"></i>
@@ -51,7 +53,7 @@ const ForgetPassword = () => {
                         </div>
                         <div className={styles.inputField}>
                             <i className="fas fa-lock"></i>
-                            <input type="password" {...register('newPassword')} onBlur={validatePassword} placeholder="New Password" required />
+                            <input type="password" {...register('newPassword')} placeholder="New Password" required />
                         </div>
                         <div className={styles.inputField}>
                             <i className="fas fa-lock"></i>
@@ -70,7 +72,7 @@ const ForgetPassword = () => {
             <div className={styles.panelsTopContainer}></div>
         </div>
         <script src="scripts/password-reset.js"></script>
-        <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/64d58efce2.js" crossOrigin="anonymous"></script>
     </div>
   )
 }

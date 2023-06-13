@@ -11,8 +11,10 @@ const Register = () => {
     const { handleSubmit, register, watch, formState: { errors } } = useForm();
 
     const handleRegister = async (data) => {
-        if(data.password !== data.confirmPassword){
-            alert("Passwords do not match! Please key in again!");
+        if(data && data.password && data.password.length < 6){
+          alert("Password must exceed length of 6!");
+        }else if(data.password !== data.confirmPassword){
+          alert("Passwords do not match! Please key in again!");
         }else{
             try {
                 const response = await axios.post('http://localhost:3001/api/auth/register', data);
@@ -23,17 +25,11 @@ const Register = () => {
             } catch (error) {
                 // Handle error response
                 console.error('Registration failed!');
+                alert(error.response.data);
                 // console.error(error.response.data);
             }
         }
     };
-
-    const validatePassword = (e) => {
-        if(e.target.value.length <= 6){
-            alert("Password must exceed length of 6!")
-            e.target.value = '';
-        }
-    }
 
   return (
     <div className={styles.registerLoginBody}>
@@ -62,7 +58,6 @@ const Register = () => {
                                 {...register('password')}
                                 placeholder="Password" 
                                 required 
-                                onBlur = {validatePassword}
                                 />
                                 {errors.password && <span>Password is required</span>}
                             </div>
