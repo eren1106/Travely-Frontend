@@ -20,7 +20,7 @@ const Register = () => {
       if(data && data.password && data.password.length < 6){
         setErrorMessage("Error: Password must exceed length of 6!");
       }else if(data.password !== data.confirmPassword){
-        setErrorMessage("Error: Passwords do not match! Please key in again!");
+        setErrorMessage("Error: Passwords do not match!");
       }else{
           try {
               const response = await axios.post('http://localhost:3001/api/auth/register', data);
@@ -31,7 +31,11 @@ const Register = () => {
           } catch (error) {
               // Handle error response
               console.error('Registration failed!');
-              setErrorMessage(error.response.data);
+              if (error.response && error.response.data) {
+                setErrorMessage("Error: " + error.response.data);
+              } else {
+                setErrorMessage('An error occurred. Please try again later.');
+              }
               // console.error(error.response.data);
           }
       }

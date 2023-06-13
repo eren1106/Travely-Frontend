@@ -15,9 +15,9 @@ const ForgetPassword = () => {
 
   const handlePasswordReset = async (data) => {
     if(data && data.newPassword && data.newPassword.length < 6){
-      setErrorMessage("Password must exceed length of 6!");
+      setErrorMessage("Error: Password must exceed length of 6!");
     }else if(data.newPassword !== data.confirmPassword){
-      setErrorMessage("Passwords do not match! Please key in again!");
+      setErrorMessage("Error: Passwords do not match!");
     }else{
       try {
         const response = await axios.post('http://localhost:3001/api/auth/resetPassword', data);
@@ -25,23 +25,20 @@ const ForgetPassword = () => {
         console.log(response.data);
         // Perform password reset logic
         console.log('Password reset form submitted:', data);
-        setErrorMessage('');
         alert("Password reset successfully! Please login again!");
         navigate('/login');
       } catch (error) {
         // Handle error response
         console.log("error occurs!");
+        if (error.response && error.response.data) {
+          setErrorMessage("Error: " + error.response.data);
+        } else {
+          setErrorMessage('An error occurred. Please try again later.');
+        }
         // console.error(error.response.data);
       }
     }
   };
-
-  const validatePassword = (e) => {
-    if(e.target.value.length < 6){
-        alert("Password must exceed length of 6!")
-        e.target.value = '';
-    }
-  }
 
 
   return (
