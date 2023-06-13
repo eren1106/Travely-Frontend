@@ -3,11 +3,10 @@ import Post from "./pages/Post";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Analytics from "./pages/Analytics";
-
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import CountryCard from "./pages/SelectCountry";
-import PostModal from './components/PostModal'
+
 function App() {
   return (
     <div>
