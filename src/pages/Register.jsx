@@ -9,6 +9,7 @@ import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
+import GoogleLogin from "./GoogleLogin";
 
 const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -84,9 +85,10 @@ const Register = () => {
                                 <a href="#" className={styles.socialIcon}>
                                     <i><FacebookOutlinedIcon/></i>
                                 </a>
-                                <a href="#" className={styles.socialIcon}>
+                                {/* <button href="#" className={styles.socialIcon}>
                                     <i><GoogleIcon/></i>
-                                </a>
+                                </button> */}
+                                <GoogleLogin />
                             </div>
                             <div className={styles.signinSignupLink}>
                                 <p className={styles.signinSignupText}>

@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register"
 import Analytics from "./pages/Analytics";
 import ForgetPassword from "./pages/ForgetPassword"
+import GoogleLogin from "./pages/GoogleLogin";
+import GoogleLogout from "./pages/GoogleLogout";
 
 
 function App() {
@@ -14,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<GoogleLogout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/post/:id" element={<Post />} />

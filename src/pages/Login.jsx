@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import GoogleLogin from "./GoogleLogin";
 
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
@@ -79,9 +80,10 @@ const Login = () => {
                 <a href="#" className={styles.socialIcon}>
                   <i><FacebookOutlinedIcon/></i>
                 </a>
-                <a href="#" className={styles.socialIcon}>
+                <GoogleLogin />
+                {/* <a href="#" className={styles.socialIcon}>
                   <i><GoogleIcon/></i>
-                </a>
+                </a> */}
               </div>
               <div className={styles.signinSignupLink}>
                 <p className={styles.signinSignupText}>
