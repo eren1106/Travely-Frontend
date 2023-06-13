@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import LoadingOverlay from '../components/LoadingOverlay';
+import { formatDate } from '../utils';
 
 const Post = () => {
   const { id } = useParams();
@@ -19,15 +20,20 @@ const Post = () => {
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [comments, setComments] = useState([]);
+  const [isCurrentUserPost, setIsCurrentUserPost] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const storedUserID = localStorage.getItem("currentUserID");
+
     const fetchData = async () => {
       setInitialLoading(true);
 
       await fetchPostData();
       await fetchUserRating();
       await fetchComments();
+      await fetchCurrentUserData();
 
       setInitialLoading(false);
     }
@@ -36,6 +42,13 @@ const Post = () => {
       try {
         const res = await axios.get(`http://localhost:3001/api/posts/${id}`); // fetch post data
         setPostData(res.data);
+
+        // check if this post is post by current user
+        console.log("ID", storedUserID);
+        if (storedUserID === res.data.userID) {
+          setIsCurrentUserPost(true);
+        }
+
         console.log(res.data);
       }
       catch (err) {
@@ -47,9 +60,11 @@ const Post = () => {
 
     const fetchUserRating = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`); // fetch post data
-        setRating(res.data.rating);
-        console.log(res.data.rating);
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/rating/${storedUserID}`);
+        if (res.data) {
+          setRating(res.data.rating);
+          console.log(res.data.rating);
+        }
       }
       catch (err) {
         console.log(err);
@@ -58,13 +73,19 @@ const Post = () => {
 
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/posts/${id}/comments`); // fetch post data
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}/comments`);
         setComments(res.data);
         console.log(res.data);
       }
       catch (err) {
         console.log(err);
       }
+    }
+
+    const fetchCurrentUserData = async () => {
+      const res = await axios.get(`http://localhost:3001/api/users/${storedUserID}`);
+      console.log("USER", res.data);
+      setCurrentUser(res.data);
     }
 
     fetchData();
@@ -124,11 +145,15 @@ const Post = () => {
     setLocationEdit(e.target.value);
   }
 
+  const handleNavigateHome = () => {
+    navigate("/");
+  }
+
   const handleClickStar = async (n) => {
     setLoading(true);
 
     try {
-      const res = await axios.put(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`, {
+      const res = await axios.put(`http://localhost:3001/api/posts/${id}/rating/${currentUser._id}`, {
         rating: n,
       });
       console.log(res.data);
@@ -145,7 +170,7 @@ const Post = () => {
     setLoading(true);
 
     try {
-      const res = await axios.delete(`http://localhost:3001/api/posts/${id}/rating/${"testuserID69"}`);
+      const res = await axios.delete(`http://localhost:3001/api/posts/${id}/rating/${currentUser._id}`);
       console.log(res.data);
       setRating(0);
     }
@@ -200,18 +225,14 @@ const Post = () => {
 
     try {
       const res = await axios.post(`http://localhost:3001/api/posts/${id}/comments`, {
-        userID: "6479d4d733b6e5f7e6ab3736",
+        userID: currentUser._id,
         commentText: commentRef.current.value,
       })
 
       console.log(res.data);
       setComments([
         ...comments,
-        {
-          username: 'Eren',
-          commentText: commentRef.current.value,
-          profilePicture: "eren.jpg"
-        }
+        res.data,
       ]);
 
       commentRef.current.value = "";
@@ -228,24 +249,24 @@ const Post = () => {
       {
         initialLoading ? <CircularProgress /> :
           <div className={styles.mainContent}>
-            <button className={`${styles.purpleBtn} ${styles.backBtn}`}>
+            <button className={`${styles.purpleBtn} ${styles.backBtn}`} onClick={handleNavigateHome}>
               Back
             </button>
             <div className={styles.postPanel}>
 
               {/* TOP SECTION */}
-              <button className={`${styles.optionBtn} ${styles.iconWrapper}`} onClick={toggleShowOption}>
+              {isCurrentUserPost && <button className={`${styles.optionBtn} ${styles.iconWrapper}`} onClick={toggleShowOption}>
                 <MoreHorizIcon />
-              </button>
+              </button>}
               {showOption && <ul className={`${styles.optionsList}`}>
                 <li className={styles.option} onClick={handleShowEdit}>Edit post</li>
                 <li className={styles.option} onClick={showDelete}>Delete post</li>
               </ul>}
               <section className={styles.topSection}>
-                <img className={styles.profilePic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
+                <img className={styles.profilePic} src={`${process.env.PUBLIC_URL}/assets/${currentUser.profilePicture}`} alt="profile pic" />
                 <div className={styles.topInfo}>
-                  <h2 className={styles.userName}>Eren</h2>
-                  <p className={styles.postDate}>April 9 2023, 13:40 pm</p>
+                  <h2 className={styles.userName}>{currentUser.username}</h2>
+                  <p className={styles.postDate}>{formatDate(postData.createdAt)}</p>
                 </div>
               </section>
               <section className={styles.contentSection}>
@@ -289,17 +310,19 @@ const Post = () => {
                       </div>
                     )
                   }
-                  <div className={styles.prev} onClick={() => plusSlides(-1)}>❮</div>
-                  <div className={styles.next} onClick={() => plusSlides(1)}>❯</div>
+                  {postData.length > 1 && <div className={styles.prev} onClick={() => plusSlides(-1)}>❮</div>}
+                  {postData.length > 1 && <div className={styles.next} onClick={() => plusSlides(1)}>❯</div>}
                 </div>
                 <br />
-                <div style={{ textAlign: 'center' }}>
-                  {
-                    postData.images.map((_, i) =>
-                      <span className={`${styles.dot} ${currentImageIndex === i && styles.active}`} onClick={() => selectSlide(i)}></span>
-                    )
-                  }
-                </div>
+                {
+                  postData.images.length > 1 && <div style={{ textAlign: 'center' }}>
+                    {
+                      postData.images.map((_, i) =>
+                        <span key={i} className={`${styles.dot} ${currentImageIndex === i && styles.active}`} onClick={() => selectSlide(i)}></span>
+                      )
+                    }
+                  </div>
+                }
 
                 {/* POST STATISTIC */}
                 <div className={`${styles.ratingAndComments}`}>
@@ -332,17 +355,18 @@ const Post = () => {
                 {/* COMMENT SECTION */}
                 <div className={`${styles.commentList}`}>
                   {
-                    comments.map((comment) => (
+                    comments.map((comment, i) => (
                       <Comment
                         imgUrl={`${process.env.PUBLIC_URL}/assets/${comment.profilePicture}`}
                         name={comment.username}
                         text={comment.commentText}
+                        key={i}
                       />
                     ))
                   }
                 </div>
                 <div className={styles.currentUserCommentBar}>
-                  <img className={styles.commentPic} src={`${process.env.PUBLIC_URL}/assets/eren.jpg`} alt="profile pic" />
+                  <img className={styles.commentPic} src={`${process.env.PUBLIC_URL}/assets/${currentUser.profilePicture}`} alt="profile pic" />
                   <input ref={commentRef} className={styles.commentInput} type="text" placeholder="Write a comment..." />
                   <button onClick={handleSubmitComment} className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
                     <SendIcon />

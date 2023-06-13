@@ -26,6 +26,7 @@ const Login = () => {
       // continue the login logic
       // localStorage.setItem('token', res.data.token);
       // localStorage.setItem('user_id', res.data.id);
+      localStorage.setItem("currentUserID", response.data._id);
       navigate('/');
     } catch (error) {
       // Handle error response
