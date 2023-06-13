@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '../styles/registerLogin.module.css';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -6,15 +6,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const ForgetPassword = () => {
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
   const { handleSubmit, register, formState: { errors } } = useForm();
 
   const handlePasswordReset = async (data) => {
     if(data && data.newPassword && data.newPassword.length < 6){
-      alert("Password must exceed length of 6!");
+      setErrorMessage("Password must exceed length of 6!");
     }else if(data.newPassword !== data.confirmPassword){
-      alert("Passwords do not match! Please key in again!");
+      setErrorMessage("Passwords do not match! Please key in again!");
     }else{
       try {
         const response = await axios.post('http://localhost:3001/api/auth/resetPassword', data);
@@ -22,6 +23,7 @@ const ForgetPassword = () => {
         console.log(response.data);
         // Perform password reset logic
         console.log('Password reset form submitted:', data);
+        setErrorMessage('');
         alert("Password reset successfully! Please login again!");
         navigate('/login');
       } catch (error) {
@@ -64,6 +66,7 @@ const ForgetPassword = () => {
                             <Link to="/login">Back to Login</Link>
                           </p>
                         </div>
+                        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                         <input type="submit" value="Reset" className={`${styles.btn} ${styles.solid}`} />
                     </form>
                 </div>
@@ -71,8 +74,7 @@ const ForgetPassword = () => {
             <div className={styles.panelsContainer}></div>
             <div className={styles.panelsTopContainer}></div>
         </div>
-        <script src="scripts/password-reset.js"></script>
-        <script src="https://kit.fontawesome.com/64d58efce2.js" crossOrigin="anonymous"></script>
+        {/* <script src="https://kit.fontawesome.com/64d58efce2.js" crossOrigin="anonymous"></script> */}
     </div>
   )
 }

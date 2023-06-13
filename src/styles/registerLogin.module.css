@@ -156,6 +156,11 @@ form {
 .signinSignupLink {
     margin-top: 10px;
 }
+.errorMessage {
+    margin-top: 5px;
+    color: red;
+    font-weight: bold;
+}
 
 .socialIcon {
     height: 46px;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/registerLogin.module.css';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
   const { handleSubmit, register, formState: { errors }  } = useForm();
@@ -14,7 +15,7 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:3001/api/auth/login', data);
       console.log("login successfully!");
-      console.log(response.data);
+      //console.log(response.data);
       // continue the login logic
       // localStorage.setItem('token', res.data.token);
       // localStorage.setItem('user_id', res.data.id);
@@ -22,7 +23,12 @@ const Login = () => {
     } catch (error) {
       // Handle error response
       console.log("error occurs!");
-      alert(error.response.data);
+      //alert(error.response.data);
+      if (error.response && error.response.data) {
+        setErrorMessage('Error: ' + error.response.data);
+      } else {
+        setErrorMessage('An error occurred. Please try again later.');
+      }
       // console.error(error.response.data);
     }
   };
@@ -58,7 +64,7 @@ const Login = () => {
                   <Link to="/forgetPassword" href="password-reset.html">Forget Password?</Link>
                 </p>
               </div>
-
+              {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
               <input type="submit" value="Login" className={`${styles.btn} ${styles.solid}`}/>
               
               <p className={styles.socialText}>Or Sign in With</p>
@@ -82,7 +88,7 @@ const Login = () => {
         <div className={styles.panelsContainer}></div>
         <div className={styles.panelsTopContainer}></div>
       </div>
-      <script src="https://kit.fontawesome.com/64d58efce2.js" crossOrigin="anonymous"></script>
+      {/* <script src="https://kit.fontawesome.com/64d58efce2.js" crossOrigin="anonymous"></script> */}
     </div>
   )
 }

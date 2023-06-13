@@ -6,30 +6,31 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const [errorMessage, setErrorMessage] = useState('');
 
-    const navigate = useNavigate();
-    const { handleSubmit, register, watch, formState: { errors } } = useForm();
+  const navigate = useNavigate();
+  const { handleSubmit, register, watch, formState: { errors } } = useForm();
 
-    const handleRegister = async (data) => {
-        if(data && data.password && data.password.length < 6){
-          alert("Password must exceed length of 6!");
-        }else if(data.password !== data.confirmPassword){
-          alert("Passwords do not match! Please key in again!");
-        }else{
-            try {
-                const response = await axios.post('http://localhost:3001/api/auth/register', data);
-                console.log('Registration successful!');
-                console.log(response.data);
-                // Continue with register logic
-                navigate('/');
-            } catch (error) {
-                // Handle error response
-                console.error('Registration failed!');
-                alert(error.response.data);
-                // console.error(error.response.data);
-            }
-        }
-    };
+  const handleRegister = async (data) => {
+      if(data && data.password && data.password.length < 6){
+        setErrorMessage("Error: Password must exceed length of 6!");
+      }else if(data.password !== data.confirmPassword){
+        setErrorMessage("Error: Passwords do not match! Please key in again!");
+      }else{
+          try {
+              const response = await axios.post('http://localhost:3001/api/auth/register', data);
+              console.log('Registration successful!');
+              console.log(response.data);
+              // Continue with register logic
+              navigate('/');
+          } catch (error) {
+              // Handle error response
+              console.error('Registration failed!');
+              setErrorMessage(error.response.data);
+              // console.error(error.response.data);
+          }
+      }
+  };
 
   return (
     <div className={styles.registerLoginBody}>
@@ -65,6 +66,8 @@ const Register = () => {
                                 <i className="fas fa-lock"></i>
                                 <input type="password" {...register('confirmPassword')} placeholder="Confirm Password" required />
                             </div>
+                            
+                            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                             <input type="submit" value="Register" className={`${styles.btn} ${styles.solid}`} id="sign-up-btn" />
                             <p className={styles.socialText}>Or Sign up With</p>
                             <div className={styles.socialMedia}>
@@ -88,7 +91,7 @@ const Register = () => {
                 <div className={styles.panelsTopContainer}></div>
                 
             </div>
-            <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+            {/* <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script> */}
         </div>
   )
 }
