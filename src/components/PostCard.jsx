@@ -37,7 +37,7 @@ const PostCard = (props) => {
       <UserProfile username={props.username} location={props.location} datetime={props.date} />
       <PostText description={props.description}/>
       <div className={styles.imageContainer}>
-          <img src={props.postimg}/>
+          <img className={styles.postImg}src={props.postimg}/>
       </div>
       <hr className={styles.lineBreak} />
       <div className={styles.userRating}>
