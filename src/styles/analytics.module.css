@@ -36,10 +36,6 @@
 
 }
 .icon3{
-  background-color: rgba(74, 108, 247, 0.1);
-  border-radius: 6px;
-}
-.icon4{
   background-color: rgba(242, 153, 74, 0.1);
   border-radius: 6px;
 }
@@ -74,10 +70,16 @@
   font-weight: 600;
 }
 
-.table-top-posts{
+.tableTopPosts{
   margin: 10px;
   padding: 20px;
 }
+
+.numOfPosts{
+  margin: 10px;
+  padding: 20px;
+}
+
 
 table{
   width: 100%;
@@ -102,7 +104,7 @@ tr:hover {background-color: #ded7fb;}
   padding: 20px;
 }
 
-.title-of-post{
+.postDescription{
   margin-left: 20px;
   padding-top: 20px;
   font-size: 15px;
@@ -115,7 +117,7 @@ tr:hover {background-color: #ded7fb;}
   font-weight: 300;
 }
 
-.title-table{
+.titleTable{
   text-align: center;
   font-size: 15px;
   font-weight: 500;
@@ -127,12 +129,12 @@ img{
 }
 
 
-.view-more{
+.viewMore{
   color: blue;
   font-weight: 500;
 }
 
-.col-view-more{
+.colViewMore{
   width: 95%;
   text-align:end;
 }

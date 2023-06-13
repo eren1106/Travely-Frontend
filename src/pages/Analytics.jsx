@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/analytics.css';
 import ViewsChart from '../components/ViewsChart';
 import PostReach from '../components/PostReach';
+import SideBar from '../components/SideBar';
+import TopBar from '../components/Topbar';
+import styles from "../styles/analytics.module.css";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+
 
 const Travely = () => {
   const { id } = useParams();
@@ -74,43 +77,45 @@ const Travely = () => {
 
   return (
     <div>
+      <SideBar/>
+      <TopBar/>
       <main>
-        <div className="section">
-          <div className="row">
-            <div className="column">
-              <div className="icon1">
+        <div className={styles.section}>
+          <div className={styles.row}>
+            <div className={styles.column}>
+              <div className={styles.icon1}>
                 <img src="assets/total-visitors.png" alt="" />
               </div>
-              <div className="content">
-                <p className="total">Visitors (Today)</p>
-                <p className="num">{visitors}</p>
+              <div className={styles.content}>
+                <p className={styles.total}>Visitors (Today)</p>
+                <p className={styles.num}>{visitors}</p>
               </div>
             </div>
-            <div className="column">
-              <div className="icon2">
+            <div className={styles.column}>
+              <div className={styles.icon2}>
                 <img src="assets/total-posts.png" alt="" />
               </div>
-              <div className="content">
-                <p className="total">Total Posts</p>
-                <p className="num">{totalPosts}</p>
+              <div className={styles.content}>
+                <p className={styles.total}>Total Posts</p>
+                <p className={styles.num}>{totalPosts}</p>
               </div>
             </div>
-            <div className="column">
-              <div className="icon4">
+            <div className={styles.column}>
+              <div className={styles.icon3}>
                 <img src="assets/rating.png" alt="" />
               </div>
-              <div className="content">
-                <p className="total">Rating</p>
-                <p className="num">{rating}/5.0</p>
+              <div className={styles.content}>
+                <p className={styles.total}>Rating</p>
+                <p className={styles.num}>{rating}/5.0</p>
               </div>
             </div>
           </div>
 
-          <div className="container">
-            <div className="row">
-              <div className="col-view-reach">
+          <div className={styles.container}>
+            <div className={styles.row}>
+              <div className=''>
                 <div>
-                  <p className="title">View Reach</p>
+                  <p className={styles.title}>View Reach</p>
                 </div>
                 <div>
                   <ViewsChart />
@@ -119,11 +124,11 @@ const Travely = () => {
             </div>
           </div>
 
-          <div className="container">
-            <div className="row">
-              <div className="col-post-reach">
+          <div className={styles.container}>
+            <div className={styles.row}>
+              <div className=''>
                 <div>
-                  <p className="title">Post Reach</p>
+                  <p className={styles.title}>Post Reach</p>
                 </div>
                 <div>
                   <PostReach />
@@ -132,26 +137,26 @@ const Travely = () => {
             </div>
           </div>
 
-          <div className="container">
-            <div className="row">
+          <div className={styles.container}>
+            <div className={styles.row}>
               <div className="col-top-post">
                 <div>
-                  <p className="title">Top Posts</p>
+                  <p className={styles.title}>Top Posts</p>
                 </div>
               </div>
             </div>
-            <div className="table-top-posts">
+            <div className={styles.tableTopPosts}>
               <table>
                 <thead>
                   <tr>
                     <th>
-                      <p className="title-table">No</p>
+                      <p className={styles.titleTable}>No</p>
                     </th>
                     <th>
-                      <p className="title-table">Posts</p>
+                      <p className={styles.titleTable}>Posts</p>
                     </th>
                     <th>
-                      <p className="title-table">Rating</p>
+                      <p className={styles.titleTable}>Rating</p>
                     </th>
                   </tr>
                 </thead>
@@ -161,19 +166,19 @@ const Travely = () => {
                     <tr key={post.id}>
                       <td>
                         <div className="number-of-post">
-                          <p className="text">{index + 1}</p>
+                          <p className={styles.text}>{index + 1}</p>
                         </div>
                       </td>
                       <td>
-                        <div className="posts">
-                          <div className="image">
-                            <img src={post.image} alt="" />
+                        <div className={styles.posts}>
+                          <div className={styles.image}>
+                            <img src={post.image} />
                           </div>
-                          <p className="title-of-post">{post.title}</p>
+                          <p className={styles.postDescription}>{post.description}</p>
                         </div>
                       </td>
                       <td>
-                        <p className="text">{post.rating}/5.0</p>
+                        <p className={styles.text}>{post.rating}/5.0</p>
                       </td>
                     </tr>
                   ))}
@@ -181,9 +186,9 @@ const Travely = () => {
               </table>
             </div>
 
-            <div className="row">
-              <div className="col-view-more">
-                <p className="view-more">View More...</p>
+            <div className={styles.row}>
+              <div className={styles.colViewMore}>
+                <p className={styles.viewMore}>View More...</p>
               </div>
             </div>
           </div>
