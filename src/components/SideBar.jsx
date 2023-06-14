@@ -6,9 +6,14 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 const SideBar = (props) => {
   const navigate = useNavigate();
+
+
+  const navigateLogoutHandler = () => {
+    navigate("/login")
+  }
   return (
     <nav className={styles.sidebar}>
       <div className={styles.profileContent}>
@@ -25,10 +30,10 @@ const SideBar = (props) => {
 
       <ul className={styles.navList}>
         <li>
-          <a href="index.html">
+          <Link to="/" >
             <i><HomeOutlinedIcon/></i>
             <span className="links_name">Home</span>
-          </a>
+          </Link>
         </li>
         <li>
           <a href="profile.html">
@@ -45,10 +50,10 @@ const SideBar = (props) => {
         </li>
 
         <li className={styles.logoutContainer}>
-          <a href="login.html" className={styles.logout}>
+          <Link to="/login" className={styles.logout}>
             <i><LogoutOutlinedIcon/></i>
             <span>Log Out</span>
-          </a>
+          </Link>
         </li>
       </ul>
 

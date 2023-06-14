@@ -49,7 +49,7 @@ const Home = () => {
       try {
         const response = await axios.get("http://localhost:3001/api/posts");
         const posts = response.data;
-        console.log(posts);
+        //console.log(posts);
         setPosts(
           // sort according to date
           posts.sort((p1, p2) => {

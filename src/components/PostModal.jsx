@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/createpostmodal.module.css";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import img from "../assets/profile.jpg";
 import OutlinedFlagTwoToneIcon from "@mui/icons-material/OutlinedFlagTwoTone";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import axios from 'axios'
@@ -87,8 +86,6 @@ const PostModal = (props) => {
     setSelectedOption(optionText);
     setOptionMenuActive(false);
   };
-
-
 
   //text area
   const [textareaValue, setTextareaValue] = useState("");
