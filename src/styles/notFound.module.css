@@ -1,0 +1,105 @@
+.body404 {
+    padding: 0px;
+    margin: 0px;
+    overflow-x: hidden; 
+}
+
+a {
+    text-decoration:none
+}
+
+.imgFluid {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+}
+
+.notFoundContent h2 {
+    margin: 16px auto;
+    padding: auto;
+}
+
+.notFoundContent p {
+    margin: 16px auto;
+    padding: auto;
+}
+
+/* header area css*/
+ 
+.sliderArea {
+    position: relative; 
+    height: 100vh;
+    background-image: url(../../public/assets/background-1.png);
+    background-size: cover;
+    background-position: center;
+} 
+
+.sliderContent {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%; 
+}
+
+
+.shuvoBtn {
+    display: inline-block;
+    border-radius: 50px;
+    padding: 15px 47px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.15rem;
+    transition: all 0.5s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    text-transform: uppercase;
+}
+
+.shuvoBtn:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1276af;
+    border-radius: 50px;
+    z-index: -2;
+}
+
+.shuvoBtn:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #13afe3;
+    transition: all .5s ease;
+    border-radius: 50px;
+    z-index: -1;
+}
+
+.shuvoBtn:hover {
+    color: #fff;
+}
+
+.shuvoBtn:hover:before {
+    width: 100%;
+}
+
+ 
+@media only screen and (max-width: 600px) {
+
+    .sliderArea .carousel-inner img.d-block.w-100 {
+        width: auto !important;
+        height: 100vh;
+    }
+
+    .sliderContent { 
+        top: 20%; 
+    }
+
+}
