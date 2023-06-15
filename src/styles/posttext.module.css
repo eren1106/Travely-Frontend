@@ -1,0 +1,11 @@
+.readMoreContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 4em;
+  padding-right: 4em;
+}
+
+.postText {
+  font-size: 0.8rem;
+  padding: 1em;
+}

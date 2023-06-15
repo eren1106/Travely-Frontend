@@ -8,7 +8,7 @@ import Analytics from "./pages/Analytics";
 import ForgetPassword from "./pages/ForgetPassword"
 import GoogleLogin from "./pages/GoogleLogin";
 import GoogleLogout from "./pages/GoogleLogout";
-
+import Search from "./pages/Search"
 
 function App() {
   return (
@@ -22,7 +22,8 @@ function App() {
         <Route path="/post/:id" element={<Post />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
+        <Route path="/search" element={<Search/>}/>
+      </Routes> 
     </div>
   );
 }

@@ -1,0 +1,50 @@
+/* Write Post */
+.writePostContainer {
+  position: relative;
+  left: 20em;
+  top: 5em;
+  width: 60%;
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+}
+
+
+.profileNameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profileNameContainer img {
+  width: 45px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.profileNameContainer p {
+  font-weight: 500;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
+
+.placeholderContainer {
+  background-color: #f0f2f5;
+  width: 90%;
+  padding: 10px;
+  margin-left: 0.4em;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.placeholderContainer:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+.placeholderText {
+  margin-left: 1em;
+  color: #65676b;
+  font-size: 14px;
+}
+

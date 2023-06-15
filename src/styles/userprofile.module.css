@@ -1,0 +1,23 @@
+/* User Post */
+.profileNameContainer {
+  display: flex;
+  align-items: center;
+}
+.profileNameContainer img {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.profileNameContainer small {
+  font-size: 12px;
+  color: #626262;
+}
+
+.profileNameContainer p {
+  font-weight: 500;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}

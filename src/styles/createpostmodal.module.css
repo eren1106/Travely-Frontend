@@ -1,0 +1,258 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+/**Dropdown menu*/
+.selectMenu {
+  margin-right: 20em;
+  max-width: 30%;
+  margin-bottom: 2em;
+}
+.selectMenu .selectBtn {
+  display: flex;
+  height: 30px;
+  background: #fff;
+  padding: 20px;
+  font-size: 15px;
+  font-weight: 400;
+  border-radius: 8px;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.selectBtn i {
+  font-size: 15px;
+  transition: 0.3s;
+}
+.selectMenu.active .selectBtn i {
+  transform: rotate(-180deg);
+}
+.selectMenu .options {
+  position: relative;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  display: none;
+  width: 400px;
+  height: 200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.selectMenu.active .options {
+  display: block;
+}
+.options .option {
+  display: flex;
+  height: 55px;
+  cursor: pointer;
+  padding: 0 16px;
+  border-radius: 8px;
+  align-items: center;
+  background: #fff;
+}
+.options .option:hover {
+  background: #f2f2f2;
+}
+.option i {
+  font-size: 15px;
+  margin-right: 12px;
+}
+.option .optionText {
+  font-size: 15px;
+  color: #333;
+}
+
+/* pop up box styling */
+.wrapper .popupOuter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+  transform: scale(1.2);
+  transition: opacity 0.3s 0s ease-in-out, transform 0.3s 0s ease-in-out;
+}
+.wrapper.active .popupOuter{
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+.wrapper .popUpBox {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 520px;
+  width: 100%;
+  overflow: auto;
+  max-height: 600px;
+}
+
+.popUpBox .close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  color: #b4b4b4;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.popUpBox .close:hover {
+  color: #333;
+}
+.popUpBox .profileText {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.popUpBox .profileText .text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+.profileText .text .name {
+  font-size: 1em;
+  font-weight: 400;
+}
+.profileText .text .profession {
+  font-size: 12px;
+  color: #626262;
+  margin-top: 8px;
+}
+.popUpBox .profileImg {
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.popUpBox textarea {
+  min-height: 140px;
+  width: 100%;
+  resize: none;
+  outline: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 10px 10px 10px 14px;
+  font-weight: 300;
+  background: #f3f3f3;
+}
+.popUpBox .button {
+  margin-left: 25em;
+  display: flex;
+  justify-content: flex-end;
+}
+.popUpBox .button button {
+  outline: none;
+  border: none;
+  margin-left: 10px;
+  background: #6f93f6;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+.button button.cancel {
+  background: #f082ac;
+}
+.button button.cancel:hover {
+  background: #ec5f95;
+}
+.button button.send:hover {
+  background: #275df1;
+}
+
+.uploadContainer {
+  height: 167px;
+  width:100%;
+  display: flex;
+  cursor: pointer;
+  margin: 30px 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 2px dashed #6990f2;
+}
+
+form p {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+/* form :where(i, p) {
+  color: #6990f2;
+} */
+
+form i {
+  font-size: 50px;
+}
+
+
+
+/**Decorate the input tag**/
+.fileInput {
+  /* hide the default appearance of the file input */
+  display: none;
+}
+
+.fileLabel {
+  display: inline-block;
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.fileLabel:hover {
+  background-color: #3e8e41;
+}
+
+/**Display image after output**/
+.uploadContainer output {
+  display: flex;
+  width: 100%;
+  height: 90%;
+  overflow-y: scroll;
+  padding: 10px;
+  gap: 2px;
+}
+
+.image {
+  display: flex;
+}
+
+.image img {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+}
