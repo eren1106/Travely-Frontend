@@ -141,10 +141,6 @@
   padding: 5px;
 }
 
-.postImage {
-  width: 100%;
-}
-
 .ratingAndComments {
   display: flex;
   gap: 20px;
@@ -290,6 +286,8 @@
 .slideImg {
   vertical-align: middle;
   width: 100%;
+  height: auto;
+  max-height: 600px;
 }
 
 .hideSlide {

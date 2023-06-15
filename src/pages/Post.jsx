@@ -24,6 +24,9 @@ const Post = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
+  // address to fecth images
+  const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
+
   useEffect(() => {
     const storedUserID = localStorage.getItem("currentUserID");
 
@@ -232,7 +235,10 @@ const Post = () => {
       console.log(res.data);
       setComments([
         ...comments,
-        res.data,
+        {
+          ...res.data,
+          username: currentUser.username,
+        }
       ]);
 
       commentRef.current.value = "";
@@ -263,7 +269,7 @@ const Post = () => {
                 <li className={styles.option} onClick={showDelete}>Delete post</li>
               </ul>}
               <section className={styles.topSection}>
-                <img className={styles.profilePic} src={`${process.env.PUBLIC_URL}/assets/${currentUser.profilePicture}`} alt="profile pic" />
+                <img className={styles.profilePic} src={`${PUBLIC_FOLDER}${currentUser.profilePicture}`} alt="profile pic" />
                 <div className={styles.topInfo}>
                   <h2 className={styles.userName}>{currentUser.username}</h2>
                   <p className={styles.postDate}>{formatDate(postData.createdAt)}</p>
@@ -306,12 +312,12 @@ const Post = () => {
                     postData.images.map((image, index) =>
                       <div className={`${currentImageIndex !== index && styles.hideSlide} ${styles.fade}`} key={index}>
                         <div className={styles.numbertext}>{`${index + 1}/${postData.images.length}`}</div>
-                        <img className={styles.slideImg} src={`${process.env.PUBLIC_URL}/assets/${image}`} alt="post" />
+                        <img className={styles.slideImg} src={`${PUBLIC_FOLDER}${image}`} alt="post" />
                       </div>
                     )
                   }
-                  {postData.length > 1 && <div className={styles.prev} onClick={() => plusSlides(-1)}>❮</div>}
-                  {postData.length > 1 && <div className={styles.next} onClick={() => plusSlides(1)}>❯</div>}
+                  {postData.images.length > 1 && <div className={styles.prev} onClick={() => plusSlides(-1)}>❮</div>}
+                  {postData.images.length > 1 && <div className={styles.next} onClick={() => plusSlides(1)}>❯</div>}
                 </div>
                 <br />
                 {
@@ -357,7 +363,7 @@ const Post = () => {
                   {
                     comments.map((comment, i) => (
                       <Comment
-                        imgUrl={`${process.env.PUBLIC_URL}/assets/${comment.profilePicture}`}
+                        imgUrl={`${PUBLIC_FOLDER}${comment.profilePicture}`}
                         name={comment.username}
                         text={comment.commentText}
                         key={i}
@@ -366,7 +372,7 @@ const Post = () => {
                   }
                 </div>
                 <div className={styles.currentUserCommentBar}>
-                  <img className={styles.commentPic} src={`${process.env.PUBLIC_URL}/assets/${currentUser.profilePicture}`} alt="profile pic" />
+                  <img className={styles.commentPic} src={`${PUBLIC_FOLDER}${currentUser.profilePicture}`} alt="profile pic" />
                   <input ref={commentRef} className={styles.commentInput} type="text" placeholder="Write a comment..." />
                   <button onClick={handleSubmitComment} className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
                     <SendIcon />
