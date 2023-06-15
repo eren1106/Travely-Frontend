@@ -13,6 +13,7 @@
 .comment {
   display: flex;
   flex-direction: column;
+  gap: 5px;
   background-color: var(--light-yellow);
   padding: 10px 15px 15px 15px;
   border-radius: 15px;
@@ -20,4 +21,5 @@
 
 .commentUserName {
   font-size: 20px;
+  margin-bottom: 0px;
 }
