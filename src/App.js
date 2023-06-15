@@ -8,6 +8,8 @@ import Analytics from "./pages/Analytics";
 import ForgetPassword from "./pages/ForgetPassword"
 import GoogleLogin from "./pages/GoogleLogin";
 import GoogleLogout from "./pages/GoogleLogout";
+import ProfilePage from "./pages/Profile"
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
         <Route path="/post/:id" element={<Post />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

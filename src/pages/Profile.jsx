@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/profile.css";
 
-const ProfilePage = () => {
+const Profile = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('Zheng Wu Bang');
   const [bio, setBio] = useState('I like travelling.');
@@ -218,5 +218,5 @@ const ProfilePage = () => {
       
 };
 
-export default ProfilePage;
+export default Profile;
 
