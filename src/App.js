@@ -10,6 +10,9 @@ import GoogleLogin from "./pages/GoogleLogin";
 import GoogleLogout from "./pages/GoogleLogout";
 import Search from "./pages/Search"
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import ProfilePage from "./pages/Profile"
+import Profile from "./pages/Profile";
+
 
 function App() {
   return (
@@ -26,6 +29,7 @@ function App() {
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="*" element={<NotFound />} />
         {/* <Route path="/logout" element={<GoogleLogout />} /> */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
