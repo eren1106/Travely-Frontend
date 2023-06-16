@@ -162,26 +162,28 @@ const Travely = () => {
                 </thead>
                 <tbody>
                 {postData &&
-                  postData.map((post, index) => (
-                    <tr key={post.id}>
-                      <td>
-                        <div className="number-of-post">
-                          <p className={styles.text}>{index + 1}</p>
-                        </div>
-                      </td>
-                      <td>
-                        <div className={styles.posts}>
-                          <div className={styles.image}>
-                            <img src={post.image} />
+                  postData
+                    .sort((a, b) => b.rating - a.rating) // Sort posts in descending order based on rating
+                    .map((post, index) => (
+                      <tr key={post.id}>
+                        <td>
+                          <div className="number-of-post">
+                            <p className={styles.text}>{index + 1}</p>
                           </div>
-                          <p className={styles.postDescription}>{post.description}</p>
-                        </div>
-                      </td>
-                      <td>
-                        <p className={styles.text}>{post.rating}/5.0</p>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td>
+                          <div className={styles.posts}>
+                            <div className={styles.image}>
+                              <img src={post.image} />
+                            </div>
+                            <p className={styles.postDescription}>{post.description}</p>
+                          </div>
+                        </td>
+                        <td>
+                          <p className={styles.text}>{post.rating}/5.0</p>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
