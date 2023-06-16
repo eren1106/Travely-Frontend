@@ -1,9 +1,64 @@
-import React from 'react'
+import React from "react";
+import styles from "../styles/sidenavigation.module.css";
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { CircularProgress } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+const SideBar = (props) => {
+  const navigate = useNavigate();
 
-const SideBar = () => {
+
+  const navigateLogoutHandler = () => {
+    navigate("/login")
+  }
   return (
-    <div>SideBar</div>
-  )
-}
+    <nav className={styles.sidebar}>
+      <div className={styles.profileContent}>
+          <div className={styles.profile}>
+          {props.loading ? <CircularProgress/> : <>
+            <img src={props.profile} alt="Profile picture" />
+            <div className={styles.profileName}>{props.username}</div>
+            <hr />
+            <p className={styles.userEmail}>{props.email}</p>
+            </>
+          }
+          </div>  
+      </div>
 
-export default SideBar
+      <ul className={styles.navList}>
+        <li>
+          <Link to="/" >
+            <i><HomeOutlinedIcon/></i>
+            <span className="links_name">Home</span>
+          </Link>
+        </li>
+        <li>
+          <a href="profile.html">
+            <i><PersonOutlineOutlinedIcon/></i>
+            <span className="links_name">Profile</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="userAnalytics.html">
+            <i><InsertChartOutlinedIcon/></i>
+            <span className="links_name">User Analytics</span>
+          </a>
+        </li>
+
+        <li className={styles.logoutContainer}>
+          <Link to="/login" className={styles.logout}>
+            <i><LogoutOutlinedIcon/></i>
+            <span>Log Out</span>
+          </Link>
+        </li>
+      </ul>
+
+    </nav>
+  );
+};
+
+export default SideBar;

@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+}
+
+body {
+  font-family: "Sora", sans-serif;
+  background-color: #d8f0fa;
+}
+
+.postContainer {
+  position: absolute;
+  margin-top: 6em;
+  margin-left: 24em;
+  width: 50%;
+  height: 80%;
+}
+
+.loading {
+  margin-left: 19em;
+  margin-top: 15em;
+}
+
