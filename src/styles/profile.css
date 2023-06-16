@@ -1,0 +1,439 @@
+#wrapper{
+    margin-left: auto;
+    margin-right: auto;
+    width: 1530px;
+  }
+  
+  .photo_container{
+    display: flex;
+    justify-content: center;
+  
+  }
+  
+  .photo {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .photo img{
+    margin-top: 80px;
+    margin-left: 110px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    box-sizing: border-box;
+    border-radius: 10px;  
+    padding: 3px;
+    background-color: white;
+  
+  }
+  
+  .photo .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    margin-left: 110px;
+  }
+  
+  .photo .overlay:hover {
+    opacity: 1;
+  }
+  
+  .photo .change-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .photo input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .content_container{
+    margin-top: 100px;
+    margin-left: 150px;
+    position: relative;
+  }
+  
+  .info_container{
+    width: 1000px;
+    min-height: 350px;
+    border: 3px solid #DED7FB;
+    border-radius: 20px;
+    position: relative;
+    margin-left: 240px;
+    overflow: hidden;
+  }
+  
+  .personal_container{
+    background-color: #DED7FB;
+    height: 50px;
+    text-align: left;
+    border-radius: 15px 15px 0px 0px;
+    padding: 10px;
+  }
+  
+  .details_container{
+    background-color: white;
+    padding: 29px;
+    
+    
+  }
+  
+  .details_title{
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 5px;
+  }
+  
+  .info_container hr{
+    border-top: 1px solid #DED7FB;
+  
+  }
+  
+  .column_1, .column_2{
+    float:left;
+    width:50%;
+  
+  }
+  
+  .column_1{
+  font-weight: bold;
+  }
+  
+  .row:after{
+    content:"";
+    display: table;
+    clear: both;
+  }
+  
+  #edit_btn{
+  border-radius: 20px;
+  width: 130px;
+  height: 35px;
+  background-color: white;
+  float: right;
+  bottom: 10px;
+  right: 10px;
+  position: relative;
+  font-weight: bold;
+  margin-top: -20px;
+  }
+  
+  .bio_container{
+    background-color: white;
+    min-height:100px;
+  
+  }
+  
+  #bio_details{
+    margin-left: 20px;
+    padding-top: 10px;
+    padding-right: 10px;
+    word-wrap: break-word;
+  }
+  
+  .editmodal_container{
+    
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 130px;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+  }
+  
+  .editmodal_content {
+    
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+  }
+  
+  .close {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  #done_button{
+    background-color: #D8F0FA;
+    border-radius: 20px;
+    width: 100px;
+    height: 30px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: table-cell;
+    vertical-align: bottom;
+    margin-bottom: 10px;
+  
+  }
+  
+  label{
+    display: block;
+    float: left;
+    clear: left;
+    width: 200px;
+  }
+  
+  input,
+  textarea {
+    width: 50%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    float: left;
+    display: block;
+  }
+  
+  button:hover{
+    transform: scale(1.1);
+  }
+  
+  label:hover{
+    background-color: #DED7FB;
+  }
+  
+  .editProfile{
+    margin: 0 auto;
+    border: 1px solid #DED7FB;
+    border-radius: 17px;
+    background-color: #DED7FB;
+    width: 500px;
+    height: 450px;
+    display: table;
+    text-align: center;
+  }
+  
+  
+  .post-container {
+    position: absolute;
+    margin-top: 20em;
+    margin-left:25em;
+    width:50%;
+    height:80%;
+  
+  }
+  
+  .single-user-post-container{
+    background-color: #FFFFFF;
+    padding:20px;
+    border-radius: 6px;
+    margin-top: 2em;
+    cursor: pointer;
+  }
+  
+  
+  .slider{
+    overflow: hidden;
+    text-align: center;
+    margin-top: 1em;
+    height:500px;
+  }
+  
+  .slides{
+    width:500%;  
+    display:flex;
+  }
+  
+  .slide {
+    display: none;
+    width:20%;
+    transition: 2s;
+  }
+  
+  .slide img {
+    width:80%;
+    height:100%;
+    object-fit:cover;
+  }
+  
+  /* Next & previous buttons */
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 80%;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+    left: 83%;
+    border-radius: 3px 0 0 3px;
+  }
+  
+  .prev {
+    right: 83%;
+    border-radius: 3px 0 0 3px;
+  }
+  
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover, .next:hover {
+    background-color: #ded7fb;
+  }
+  
+  .post-container {
+    position: absolute;
+    margin-top: -1em;
+    margin-left:25em;
+    width:50%;
+    height:80%;
+  
+  }
+  
+  .single-user-post-container{
+    background-color: #FFFFFF;
+    padding:20px;
+    border-radius: 6px;
+    margin-top: 2em;
+  }
+  
+  
+  .slider{
+    overflow: hidden;
+    text-align: center;
+    margin-top: 1em;
+    height:500px;
+  }
+  
+  .slides{
+    width:500%;  
+    display:flex;
+  }
+  
+  .slide {
+    display: none;
+    width:20%;
+    transition: 2s;
+  }
+  
+  .slide img {
+    width:80%;
+    height:100%;
+    object-fit:cover;
+  }
+  
+  /* Next & previous buttons */
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 80%;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+    left: 83%;
+    border-radius: 3px 0 0 3px;
+  }
+  
+  .prev {
+    right: 83%;
+    border-radius: 3px 0 0 3px;
+  }
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover, .next:hover {
+    background-color: #ded7fb;
+  }
+  
+  
+  
+  /* Fading animation */
+  .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+  
+  @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+  
+  /* On smaller screens, decrease text size */
+  @media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}
+  }
+  
+  /* Fading animation */
+  .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+  
+  @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+  
+  /* On smaller screens, decrease text size */
+  @media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}
+  }
+  
+  #delete_btn{
+    border-radius: 20px;
+    width: 130px;
+    height: 35px;
+    background-color: white;
+    color: red;
+    float: right;
+    bottom: 10px;
+    right: 10px;
+    position: relative;
+    font-weight: bold;
+    margin-top: -20px;
+  }
+  
+  
