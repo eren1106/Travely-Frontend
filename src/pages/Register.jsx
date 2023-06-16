@@ -28,6 +28,7 @@ const Register = () => {
               console.log('Registration successful!');
               console.log(response.data);
               // Continue with register logic
+              localStorage.setItem("currentUserID", response.data._id);
               navigate('/');
           } catch (error) {
               // Handle error response

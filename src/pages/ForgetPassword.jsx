@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import CountdownTimer from '../components/CountDownTimer';
 
 const ForgetPassword = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,12 +21,10 @@ const ForgetPassword = () => {
       setErrorMessage("Error: Passwords do not match!");
     }else{
       try {
-        const response = await axios.post('http://localhost:3001/api/auth/resetPassword', data);
-        console.log("reset password successfully!");
-        console.log(response.data);
+        const response = await axios.post('http://localhost:3001/api/auth/reset', data);
         // Perform password reset logic
         console.log('Password reset form submitted:', data);
-        alert("Password reset successfully! Please login again!");
+        alert("Reset password successfully! Please login again!");
         navigate('/login');
       } catch (error) {
         // Handle error response
@@ -40,6 +39,13 @@ const ForgetPassword = () => {
     }
   };
 
+  const [email, setEmail] = useState('');
+
+  const handleEmailChange = (e) => {
+    console.log("email changed: " + e.target.value);
+    setEmail(e.target.value);
+  };
+
 
   return (
     <div className={styles.registerLoginBody}>
@@ -50,7 +56,7 @@ const ForgetPassword = () => {
                         <h2 className={styles.title}>Reset Password</h2>
                         <div className={styles.inputField}>
                             <i><MailOutlinedIcon/></i>
-                            <input type="text" {...register('email')} placeholder="Email" required />
+                            <input type="text" onInput={handleEmailChange} {...register('email')} placeholder="Email" required />
                         </div>
                         <div className={styles.inputField}>
                             <i><LockOutlinedIcon/></i>
@@ -59,6 +65,12 @@ const ForgetPassword = () => {
                         <div className={styles.inputField}>
                             <i><LockOutlinedIcon/></i>
                             <input type="password" {...register('confirmPassword')} placeholder="Confirm Password" required />
+                        </div>
+                        <div className={`${styles.inputField} ${styles.verification}`}>
+                            <i><LockOutlinedIcon/></i>
+                            <input type="text" {...register('code')} placeholder="Email Verification Code" required />
+                            <CountdownTimer email={email}/>
+                            {/* <CountdownTimer/> */}
                         </div>
                         <div className={styles.backToLoginLink}>
                           <p className={styles.backToLoginLinkText}>
