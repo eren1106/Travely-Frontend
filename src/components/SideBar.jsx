@@ -36,10 +36,10 @@ const SideBar = (props) => {
           </Link>
         </li>
         <li>
-          <a href="profile.html">
+          <Link to="/profile">
             <i><PersonOutlineOutlinedIcon/></i>
             <span className="links_name">Profile</span>
-          </a>
+          </Link>
         </li>
 
         <li>
