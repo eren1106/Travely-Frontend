@@ -8,20 +8,28 @@ import Analytics from "./pages/Analytics";
 import ForgetPassword from "./pages/ForgetPassword"
 import GoogleLogin from "./pages/GoogleLogin";
 import GoogleLogout from "./pages/GoogleLogout";
+import Search from "./pages/Search"
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import ProfilePage from "./pages/Profile"
+import Profile from "./pages/Profile";
 
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/post/:id" element={<Post />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/search" element={<Search />} />
+        </Route>
         <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<GoogleLogout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route path="/post/:id" element={<Post />} />
-        <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<NotFound />} />
+        {/* <Route path="/logout" element={<GoogleLogout />} /> */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

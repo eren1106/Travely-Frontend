@@ -1,0 +1,94 @@
+.sidebar {
+  height: 100%;
+  position: fixed;
+  margin-top: 60px;
+  width: 220px;
+  position: fixed;
+  background: #ffffff;
+  left: 0;
+  padding: 6px 14px;
+  transition: all 0.5s ease;
+}
+
+.sidebar .profileContent .profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1em;
+}
+
+hr {
+  height: 0.2px;
+  width: 100%;
+  background-color: black;
+}
+
+.profileContent .profile .profileName {
+  margin: 0.5em;
+  font-size: 15px;
+  font-weight: 400;
+  color: #626262;
+  text-align: center;
+}
+
+.userEmail {
+  font-size: 12px;
+  margin-top: 5%;
+  color: #0f191a;
+  opacity: 50%;
+}
+.profile img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.navList {
+  margin-top: 20px;
+  height: 100%;
+  padding-inline-start: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.navList li {
+  list-style: none;
+  position: relative;
+  height: 50px;
+  width: 180px;
+  line-height: 50px;
+  margin-top: 0.5em;
+}
+
+.navList li a {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  transition: all 0.4s ease;
+  text-align: center;
+}
+
+.navList li a i {
+  height: 50px;
+  min-width: 40px;
+  border-radius: 12px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar ul li a:hover {
+  background-color: #ded7fb;
+}
+
+.logoutContainer {
+  margin-top: 9em !important;
+}
+
+.logout {
+  color: red !important;
+  width: 180px;
+}
