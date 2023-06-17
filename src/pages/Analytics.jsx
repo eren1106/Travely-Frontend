@@ -31,6 +31,9 @@ const Travely = () => {
   const [view,setView] = useState([]);
   const [filteredView, setFilteredView] = useState();
   const [rating, setRating] = useState();
+
+
+  //mock user id
   const userId = "6481966c3137e182902f753d";
   useEffect(() => {
     const fetchData = async () => {

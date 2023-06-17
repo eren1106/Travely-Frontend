@@ -35,28 +35,17 @@ const PostReach = (props) => {
     { x: Date.parse("2023-12-01"), y: monthCounts["2023-12"] || 0 },
   ];
 
-  //day logic
-  // const days = [
-  //   { x: Date.parse("2023-04-01"), y: 12 },
-  //   { x: Date.parse("2023-04-02"), y: 20 },
-  //   { x: Date.parse("2023-04-03"), y: 10 },
-  //   { x: Date.parse("2023-04-04"), y: 30 },
-  //   { x: Date.parse("2023-04-05"), y: 20 },
-  //   { x: Date.parse("2023-04-06"), y: 50 },
-  //   { x: Date.parse("2023-04-07"), y: 10 },
-  // ];
-
   // Get today's date
   const today = new Date();
 
   // Calculate the recent past 7 days starting from today
   const pastDates = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 6; i > 0; i--) {
     const date = new Date(today);
-    date.setDate(today.getDate() - i);
+    date.setDate(today.getDate() - i + 2);
     pastDates.push(date.toISOString().split("T")[0]);
   }
-
+  console.log(pastDates);
   // Count the occurrences of matching dates
   const countOccurrences = (dates, targetDate) => {
     let count = 0;
@@ -74,15 +63,40 @@ const PostReach = (props) => {
     return { x: Date.parse(date), y: count };
   });
 
-  console.log(days);
+  //console.log(days);
 
-  const weeks = [
-    { x: Date.parse("2023-04-02"), y: 90 },
-    { x: Date.parse("2023-04-09"), y: 50 },
-    { x: Date.parse("2023-04-16"), y: 30 },
-    { x: Date.parse("2023-04-23"), y: 50 },
-    { x: Date.parse("2023-04-30"), y: 30 },
-  ];
+  // logic to determine week
+  // Calculate the start date 5 weeks ago from today
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 35);
+  startDate.setHours(0, 0, 0, 0);
+
+  // Create an array to store the weekly counts
+  const weeks = [];
+
+  // Iterate over the past 5 weeks
+  for (let i = 0; i < 5; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(currentDate.getDate() + i * 7);
+
+    const weekStart = currentDate.getTime();
+    const weekEnd = new Date(currentDate).setDate(currentDate.getDate() + 6);
+
+    const count = view.filter((date) => {
+      const dateObj = new Date(date);
+      return dateObj >= weekStart && dateObj <= weekEnd;
+    }).length;
+
+    weeks.push({ x: weekStart, y: count });
+  }
+
+  // const weeks = [
+  //   { x: Date.parse("2023-04-02"), y: 90 },
+  //   { x: Date.parse("2023-04-09"), y: 50 },
+  //   { x: Date.parse("2023-04-16"), y: 30 },
+  //   { x: Date.parse("2023-04-23"), y: 50 },
+  //   { x: Date.parse("2023-04-30"), y: 30 },
+  // ];
 
   // const months = [
   //   { x: Date.parse("2023-01-01"), y: 10 },
@@ -97,6 +111,17 @@ const PostReach = (props) => {
   //   { x: Date.parse("2023-10-01"), y: 30 },
   //   { x: Date.parse("2023-11-01"), y: 70 },
   //   { x: Date.parse("2023-12-01"), y: 20 },
+  // ];
+
+  //day logic
+  // const days = [
+  //   { x: Date.parse("2023-04-01"), y: 12 },
+  //   { x: Date.parse("2023-04-02"), y: 20 },
+  //   { x: Date.parse("2023-04-03"), y: 10 },
+  //   { x: Date.parse("2023-04-04"), y: 30 },
+  //   { x: Date.parse("2023-04-05"), y: 20 },
+  //   { x: Date.parse("2023-04-06"), y: 50 },
+  //   { x: Date.parse("2023-04-07"), y: 10 },
   // ];
 
   const handleViewChange = (event) => {
