@@ -25,6 +25,10 @@ const Topbar = () => {
   const [input, setInput] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+  }
+
   // set timer on user input
   let timeoutId;
   const handleInputChange = (e) => {
@@ -56,7 +60,7 @@ const Topbar = () => {
   useEffect(() => {
     const fetchData = async () => {
       await getPosts();
-      console.log(searchResult);
+      //console.log(searchResult);
     };
     const getPosts = async () => {
       try {
@@ -105,7 +109,7 @@ const Topbar = () => {
 
         <div className={styles.iconContainer}>
           <ul>
-            <Link to="/login">
+            <Link to="/login" onClick={handleLogout}>
               <li className={styles.listItem}>
                 <i>
                   <LogoutOutlinedIcon />
