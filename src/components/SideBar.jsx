@@ -4,13 +4,16 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 const SideBar = (props) => {
   const navigate = useNavigate();
 
 
+  const handleLogout = () => {
+    localStorage.removeItem("currentUserID");
+    navigate("/login");
   const handleLogout = () => {
     localStorage.removeItem('user');
   }
@@ -36,10 +39,10 @@ const SideBar = (props) => {
           </Link>
         </li>
         <li>
-          <a href="profile.html">
+          <Link to="/profile">
             <i><PersonOutlineOutlinedIcon/></i>
             <span className="links_name">Profile</span>
-          </a>
+          </Link>
         </li>
 
         <li>
@@ -50,10 +53,10 @@ const SideBar = (props) => {
         </li>
 
         <li className={styles.logoutContainer}>
-          <Link to="/login" className={styles.logout} onClick={handleLogout}>
+          <Button onClick={handleLogout} className={styles.logout}>
             <i><LogoutOutlinedIcon/></i>
             <span>Log Out</span>
-          </Link>
+          </Button>
         </li>
       </ul>
 

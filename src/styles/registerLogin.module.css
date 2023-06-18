@@ -95,6 +95,21 @@ form {
     padding: 0 .7rem;
 }
 
+.verification {
+    grid-template-columns: 15% 70% 15%;
+}
+
+
+
+.verification .cannotClick {
+    color: #aaa;
+}
+
+.verification .canClick:hover {
+    cursor: pointer;
+    color: #9146FF;
+}
+
 .inputField i {
     text-align: center;
     display:flex;
@@ -166,7 +181,6 @@ form {
 }
 
 .socialIcon {
-    padding-top: 6px;
     height: 46px;
     width: 46px;
     font-size: 1.1rem;

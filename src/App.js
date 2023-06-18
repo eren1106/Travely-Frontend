@@ -8,6 +8,11 @@ import Analytics from "./pages/Analytics";
 import ForgetPassword from "./pages/ForgetPassword"
 import GoogleLogout from "./pages/GoogleLogout";
 import Search from "./pages/Search"
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import ProfilePage from "./pages/Profile"
+import Profile from "./pages/Profile";
+
+
 import { UserContext } from "./userContext";
 import { useContext } from "react";
 function App() {
@@ -18,15 +23,21 @@ function App() {
   return (
     <div>
       <Routes>
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/post/:id" element={<Post />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/search" element={<Search />} />
+        </Route>
         <Route exact path="/" element={user ? <Home /> : <Login />}></Route>
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<GoogleLogout />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route path="/post/:id" element={<Post />} />
-        <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/search" element={<Search/>}/>
-      </Routes> 
+        {/* <Route path="/logout" element={<GoogleLogout />} /> */}
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </div>
   );
 }

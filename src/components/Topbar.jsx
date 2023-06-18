@@ -5,6 +5,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const Topbar = () => {
 
@@ -80,6 +81,12 @@ const Topbar = () => {
     };
     fetchData();
   }, [input]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("currentUserID");
+    navigate("/login");
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -109,13 +116,13 @@ const Topbar = () => {
 
         <div className={styles.iconContainer}>
           <ul>
-            <Link to="/login" onClick={handleLogout}>
+            <Button onClick={handleLogout}>
               <li className={styles.listItem}>
                 <i>
                   <LogoutOutlinedIcon />
                 </i>
               </li>
-            </Link>
+            </Button>
           </ul>
         </div>
       </div>
