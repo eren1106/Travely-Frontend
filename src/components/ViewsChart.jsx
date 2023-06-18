@@ -118,12 +118,15 @@ const ViewsChart = (props) => {
   // ];
 
 
-
+  //function is defined to handle the change 
+  //event when the user selects a different view option. 
+  //It updates the selectedView state variable based on the selected value.
   const handleViewChange = (event) => {
     setSelectedView(event.target.value);
   };
 
-
+  //determine the x-axis of the chart
+  //It maps the corresponding labels from the generated arrays of objects (months, weeks, or days).
   const getLabels = () => {
     switch (selectedView) {
       case 'day':

@@ -26,7 +26,8 @@ const Travely = () => {
     return defaultImg;
   };
 
-  //fetch all user post
+
+  //define the state variable
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [view,setView] = useState([]);
@@ -34,7 +35,7 @@ const Travely = () => {
   const [rating, setRating] = useState();
   const [profileView, setProfileView] = useState([]);
 
-  
+  //fetch all user post
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -43,6 +44,9 @@ const Travely = () => {
       await getProfileView();
       setIsLoading(false);
     };
+
+    //visitors(Today) - post view of user today 
+    // post reach 
     const getView = async () => {
       try {
         const res = await axios.get(
@@ -67,6 +71,7 @@ const Travely = () => {
       }
     };
 
+    // view reach - profile view of user
     const getProfileView = async () => {
       try {
         const res = await axios.get(
@@ -81,6 +86,7 @@ const Travely = () => {
       }
     };
 
+    //total posts , top post 
     const getPosts = async () => {
       try {
         const response = await axios.get(
@@ -144,7 +150,7 @@ const Travely = () => {
                 </div>
                 <div className="column">
                   <div className="icon4">
-                    <img src={PUBLIC_FOLDER + "total-likes.png"} alt="" />
+                    <img src={PUBLIC_FOLDER + "rating.png"} alt="" />
                   </div>
                   <div className="content">
                     <p className="total">Rating</p>
