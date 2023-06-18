@@ -1,6 +1,7 @@
 .header {
   width: 100%;
   height: 60px;
+  top: 0;
   position: fixed;
   background-color: #ded7fb;
   z-index: 1;

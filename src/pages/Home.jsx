@@ -19,7 +19,7 @@ const Home = () => {
   //context API to get user data
   const { user } = useContext(UserContext);
   
-  // address to fecth images
+  // address to fetch images
   const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
 
  

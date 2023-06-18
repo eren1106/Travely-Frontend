@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 
 const SideBar = (props) => {
   const navigate = useNavigate();
+  const userID = localStorage.getItem("currentUserID");
 
   const handleLogout = () => {
     localStorage.removeItem("currentUserID");
@@ -39,7 +40,7 @@ const SideBar = (props) => {
           </Link>
         </li>
         <li>
-          <Link to="/profile">
+          <Link to={`/profile/${userID}`}>
             <i><PersonOutlineOutlinedIcon/></i>
             <span className="links_name">Profile</span>
           </Link>

@@ -25,13 +25,13 @@ function App() {
             <Route path="/post/:id" element={<Post />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/profile/:id" element={<Profile />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="*" element={<NotFound />} />
           {/* <Route path="/logout" element={<GoogleLogout />} /> */}
-          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
   );
