@@ -18,9 +18,9 @@
 
 /**Dropdown menu*/
 .selectMenu {
-  margin-right: 20em;
+  margin-top: 1em;
+  margin-right: 22em;
   max-width: 30%;
-  margin-bottom: 2em;
 }
 .selectMenu .selectBtn {
   display: flex;
@@ -80,7 +80,7 @@
 }
 
 /* pop up box styling */
-.wrapper .popupOuter{
+.wrapper .popupOuter {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,7 +94,7 @@
   transform: scale(1.2);
   transition: opacity 0.3s 0s ease-in-out, transform 0.3s 0s ease-in-out;
 }
-.wrapper.active .popupOuter{
+.wrapper.active .popupOuter {
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
@@ -148,6 +148,25 @@
   object-fit: cover;
   border-radius: 50%;
 }
+
+.textAreaPost {
+  font-family: "Sora", sans-serif;
+}
+.textAreaSmall {
+  font-family: "Sora", sans-serif;
+  width: 30%;
+  height: 30px;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 10px 10px 10px 14px;
+  font-weight: 300;
+  background: #f3f3f3;
+  margin-right: 28em;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  outline:none;
+  margin-top: 1em;
+  border: 1px solid #ddd;
+}
 .popUpBox textarea {
   min-height: 140px;
   width: 100%;
@@ -191,7 +210,7 @@
 
 .uploadContainer {
   height: 167px;
-  width:100%;
+  width: 100%;
   display: flex;
   cursor: pointer;
   margin: 30px 0;
@@ -215,8 +234,6 @@ form i {
   font-size: 50px;
 }
 
-
-
 /**Decorate the input tag**/
 .fileInput {
   /* hide the default appearance of the file input */
@@ -231,6 +248,7 @@ form i {
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
+  width: 90px !important;
 }
 
 .fileLabel:hover {
