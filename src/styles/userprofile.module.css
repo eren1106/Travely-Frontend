@@ -2,12 +2,14 @@
 .profileNameContainer {
   display: flex;
   align-items: center;
+  
 }
 .profileNameContainer img {
   border-radius: 50%;
   height: 50px;
   width: 50px;
   object-fit: cover;
+  cursor: pointer;
   margin-right: 10px;
 }
 
@@ -20,4 +22,12 @@
   font-weight: 500;
   margin-block-start: 0 !important;
   margin-block-end: 0 !important;
+}
+
+.userName {
+  cursor: pointer;
+}
+
+.userName:hover {
+  color:blue;
 }

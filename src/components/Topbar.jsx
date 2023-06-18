@@ -29,6 +29,7 @@ const Topbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("currentUserID");
     navigate("/login");
+    localStorage.removeItem('user');
   }
 
   // set timer on user input

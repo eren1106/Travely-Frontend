@@ -12,7 +12,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement);
 const PostReach = (props) => {
   const [selectedView, setSelectedView] = useState("month"); // Default selected view is 'month'
   const view = props.view;
-  console.log(view);
+  //console.log(view);
 
   //month logic
   const monthCounts = {};
@@ -42,10 +42,10 @@ const PostReach = (props) => {
   const pastDates = [];
   for (let i = 6; i > 0; i--) {
     const date = new Date(today);
-    date.setDate(today.getDate() - i + 2);
+    date.setDate(today.getDate() - i + 1);
     pastDates.push(date.toISOString().split("T")[0]);
   }
-  console.log(pastDates);
+  //console.log(pastDates);
   // Count the occurrences of matching dates
   const countOccurrences = (dates, targetDate) => {
     let count = 0;

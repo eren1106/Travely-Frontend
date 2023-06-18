@@ -156,6 +156,7 @@ select {
   font-size: 15px;
   margin: 5px;
   padding: 5px;
+  margin-left: 10em;
 }
 
 /* Responsive layout - when the screen is less than 600px wide, make the three columns stack on top of each other instead of next to each other */

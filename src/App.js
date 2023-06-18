@@ -9,18 +9,15 @@ import ForgetPassword from "./pages/ForgetPassword"
 import GoogleLogout from "./pages/GoogleLogout";
 import Search from "./pages/Search"
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import { UserContext } from "./userContext";
-import { useContext } from "react";
-import{UserProvider}from './userContext'
 import Profile from "./pages/Profile";
-
+import { UserContext, UserProvider } from "./userContext";
+import { useContext } from "react";
 function App() {
 
   //context API to get userID
   const { user } = useContext(UserContext);
 
   return (
-    <UserProvider>
       <div>
         <Routes>
           <Route element={<ProtectedRoutes />}>
@@ -37,7 +34,6 @@ function App() {
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
-    </UserProvider>
   );
 }
 

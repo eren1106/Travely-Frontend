@@ -14,6 +14,7 @@ const SideBar = (props) => {
   const handleLogout = () => {
     localStorage.removeItem("currentUserID");
     navigate("/login");
+    localStorage.removeItem('user');
   }
   
   return (

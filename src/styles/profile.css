@@ -221,7 +221,7 @@
     width: 200px;
   }
   
-  input,
+  .profileInput,
   textarea {
     width: 50%;
     padding: 0.5em;
