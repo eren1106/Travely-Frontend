@@ -13,8 +13,6 @@ const SideBar = (props) => {
 
   const handleLogout = () => {
     localStorage.removeItem("currentUserID");
-    navigate("/login");
-  const handleLogout = () => {
     localStorage.removeItem('user');
   }
   return (
@@ -53,10 +51,10 @@ const SideBar = (props) => {
         </li>
 
         <li className={styles.logoutContainer}>
-          <Button onClick={handleLogout} className={styles.logout}>
+          <Link to="/login" onClick={handleLogout} className={styles.logout}>
             <i><LogoutOutlinedIcon/></i>
             <span>Log Out</span>
-          </Button>
+          </Link>
         </li>
       </ul>
 

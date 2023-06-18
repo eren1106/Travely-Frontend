@@ -28,6 +28,7 @@ const Topbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem("currentUserID");
   }
 
   // set timer on user input
@@ -82,11 +83,6 @@ const Topbar = () => {
     fetchData();
   }, [input]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("currentUserID");
-    navigate("/login");
-  }
-
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -116,13 +112,13 @@ const Topbar = () => {
 
         <div className={styles.iconContainer}>
           <ul>
-            <Button onClick={handleLogout}>
+            <Link to="/login" onClick={handleLogout}>
               <li className={styles.listItem}>
                 <i>
                   <LogoutOutlinedIcon />
                 </i>
               </li>
-            </Button>
+            </Link>
           </ul>
         </div>
       </div>
