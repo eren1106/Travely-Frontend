@@ -5,7 +5,7 @@ import axios from "axios"
 import TopBar from "../components/Topbar";
 import SideBar from "../components/SideBar";
 import PostCard from "../components/PostCard";
-import styles from "../styles/home.module.css";
+import styles from "../styles/profile.module.css";
 import { CircularProgress } from "@mui/material";
 import { UserContext } from '../userContext';
 import { formatDate } from '../utils';
@@ -54,6 +54,7 @@ const Profile = () => {
         console.log("USER", id);
         userData = res.data;
         setUser(userData);
+        
         console.log("USER DATA", userData);
       } catch (error) {
         console.error(error);
@@ -154,7 +155,7 @@ const Profile = () => {
       console.error('Error updating username and bio in the database', error);
     }
 
-
+    handleCloseModal();
   };
 
   const handleDeleteAccount = async () => {
@@ -164,11 +165,11 @@ const Profile = () => {
       try {
         const response = await axios.delete(`http://localhost:3001/api/users/${user._id}`);
 
-          // Redirect to home page or any other desired page
-          console.log(response.data);
-          navigate("/login");
-          localStorage.removeItem('user');
-          localStorage.removeItem('currentUserID');
+        // Redirect to home page or any other desired page
+        console.log(response.data);
+        navigate("/login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('currentUserID');
 
       } catch (error) {
         console.error('Error deleting account', error);
@@ -281,15 +282,8 @@ const Profile = () => {
                         </span>
 
                         <div className="input_container">
-                          <br />
-                          <br />
-                          <br />
-                          <br />
-                          <br />
-                          <br />
-                          <br />
                           <label htmlFor="username">Username</label>
-                          <input className="profileInput" type="text" id="username" name="username" defaultValue="username" required ref={inputUsernameRef} />
+                          <input className="profileInput" type="text" id="username" name="username" defaultValue={user.username} required ref={inputUsernameRef} />
                           <br />
                           <br />
 
@@ -363,7 +357,7 @@ const Profile = () => {
           </div>
         </div>
       }
-    </div>  
+    </div>
   );
 
 };
