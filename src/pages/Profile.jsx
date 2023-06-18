@@ -1,25 +1,79 @@
-import React, { useState, useLayoutEffect, useRef} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useLayoutEffect, useEffect, useRef, useContext} from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import "../styles/profile.css";
+import axios from "axios"
+import TopBar from "../components/Topbar";
+import SideBar from "../components/SideBar";
+import PostCard from "../components/PostCard";
+import styles from "../styles/home.module.css";
+import { CircularProgress } from "@mui/material";
+import { UserContext } from '../userContext';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('Zheng Wu Bang');
+  //const {userID} = useParams();
+  const userID = "6481966c3137e182902f753d";
+  const {user, setUser}=useContext(UserContext);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const [username, setUsername] = useState(user && user.username);
+  const [profile, setProfile] = useState("");
   const [bio, setBio] = useState('I like travelling.');
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const [DOB, setDOB] = useState("");
+  const [dJoined, setDJoined] = useState("");
   const [profilePic, setProfilePic] = useState('assets/profile.jpg');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [IsAccountDeleted, setIsAccountDeleted] = useState(false);
-  const [originalUsername, setOriginalUsername] = useState('');
-  const [originalBio, setOriginalBio] = useState('');
+  
 
+
+  const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
   // Create refs for DOM elements
   const divUsernameRef = useRef(null);
   const divBioRef = useRef(null);
   const inputUsernameRef = useRef(null);
   const inputBioRef = useRef(null);
 
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      await getPosts();
+      setIsLoading(false);
+    };
 
+    const getPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/posts/${userID}`
+        );
+        const userPost = response.data;
+        setPosts(userPost);
+        console.log(userPost);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  },[userID, setUser]);
+
+  const checkProfileExists = (profile) => {
+    let defaultImg = "";
+    if (profile.length === 0) {
+      defaultImg = "defaultProfile.jpeg";
+    } else {
+      defaultImg = profile;
+    }
+    return defaultImg;
+  };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+  
   const handleChangeProfilePic = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -39,7 +93,7 @@ const Profile = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async() => {
     // Handle saving the profile changes
     // Update the state with new username and bio values
     var usernamenew = inputUsernameRef.current.value;
@@ -60,104 +114,44 @@ const Profile = () => {
     divBio.innerHTML = bionew;
 
     setIsEditModalOpen(false);
+
+    try {
+      await axios.put(`http://localhost:3001/api/users/${userID}`, {
+        username: usernamenew,
+        bio: bionew,
+      });
+
+      setUsername(usernamenew);
+
+      console.log('Username and bio updated successfully in the database.');
+    } catch (error) {
+      console.error('Error updating username and bio in the database', error);
+    }
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async() => {
     if (window.confirm('Do you confirm to delete account?')) {
       // Handle account deletion
       // Redirect to the appropriate route/page
-      deleteAccount()
-        .then(() => {
-          setIsAccountDeleted(true);
-          navigate.push('/login');
-        })
+      try {
+        const response = await axios.delete(`http://localhost:3001/api/users/${userID}`);
+        
+          // Redirect to home page or any other desired page
+          console.log(response.data);
+          navigate("/login");
+          localStorage.removeItem('user');
 
-        .catch((error) =>{
-          console.error("Error deleting account", error);
-        });
+      } catch (error) {
+        console.error('Error deleting account', error);
+      }
     }
-  }
-  
-
-  const deleteAccount = () =>{
-    return new Promise((resolve, reject)=> {
-      setTimeout(()=>{
-        resolve();
-      },2000);
-    });
   };
-
-  /*
-  useLayoutEffect(() => {
-    const inputUsername = inputUsernameRef.current;
-    const inputBio = inputBioRef.current;
-  
-    if (inputUsername && inputBio) {
-      const originalUsername = inputUsername.defaultValue;
-      const originalBio = inputBio.defaultValue;
-  
-      const handleMouseOverUsername = () => {
-        if (inputUsername.value === username) {
-          inputUsername.value = '';
-        }
-      };
-      
-      const handleMouseOverBio = () => {
-        if (inputBio.value === bio) {
-          inputBio.value = '';
-        }
-      };
-      
-      const handleMouseOutUsername = () => {
-        if (inputUsername.value === '') {
-          inputUsername.value = username;
-        }
-      };
-      
-      const handleMouseOutBio = () => {
-        if (inputBio.value === '') {
-          inputBio.value = bio;
-        }
-      };      
-  
-      const handleClickUsername = () => {
-        if (inputUsername.value === originalUsername) {
-          inputUsername.value = '';
-        }
-      };
-  
-      const handleClickBio = () => {
-        if (inputBio.value === originalBio) {
-          inputBio.value = '';
-        }
-      };
-  
-      inputUsername.addEventListener('mouseover', handleMouseOverUsername);
-      inputBio.addEventListener('mouseover', handleMouseOverBio);
-      inputUsername.addEventListener('mouseout', handleMouseOutUsername);
-      inputBio.addEventListener('mouseout', handleMouseOutBio);
-      inputUsername.addEventListener('click', handleClickUsername);
-      inputBio.addEventListener('click', handleClickBio);
-  
-      // Clean up event listeners on component unmount
-      return () => {
-        inputUsername.removeEventListener('mouseover', handleMouseOverUsername);
-        inputBio.removeEventListener('mouseover', handleMouseOverBio);
-        inputUsername.removeEventListener('mouseout', handleMouseOutUsername);
-        inputBio.removeEventListener('mouseout', handleMouseOutBio);
-        inputUsername.removeEventListener('click', handleClickUsername);
-        inputBio.removeEventListener('click', handleClickBio);
-      };
-    }
-  }, []);
-  */
 
   
   useLayoutEffect(() => {
     displayCurrentUserInfo();
-  }, [divUsernameRef, divBioRef]);
-  
-  
+  }, [divUsernameRef, divBioRef, username]);
+    
   const displayCurrentUserInfo = () => {
       const divusername = divUsernameRef.current;
       const divBio = divBioRef.current;
@@ -170,8 +164,9 @@ const Profile = () => {
           const inputUsername = inputUsernameRef.current;
           const inputBio = inputBioRef.current;
 
-          inputUsername.value = usernamenew;
-          inputBio.value = bionew;
+          inputUsername.value = usernamenew === user.username ? '' : usernamenew;
+          inputBio.value = bionew === bio ? '' : bionew;
+
 
           inputUsername.addEventListener('mouseover', () => {
             if (inputUsername.value === usernamenew) {
@@ -209,8 +204,6 @@ const Profile = () => {
 
   };
 
-  
-
   if (IsAccountDeleted) {
     // Render a message or redirect to a different page after account deletion
     return <div>Account successfully deleted!</div>;
@@ -219,6 +212,8 @@ const Profile = () => {
   return (
   
       <div id="wrapper">
+        <SideBar loading={isLoading} username={user&&user.username} profile = {PUBLIC_FOLDER + profile} email={user&&user.email}/>
+        <TopBar />
         <div className="photo_container">
           <div className="photo" id="pic" style={{ textAlign: 'center' }}>
             <img src={profilePic} alt="Profile" />
@@ -233,6 +228,12 @@ const Profile = () => {
           <div className="info_container">
             <div className="personal_container">
               <div className="details_title">Personal Details</div>
+              <div className="actions_container">
+                <button type="submit" id="delete_btn" onClick={handleDeleteAccount}>
+                  Delete Account
+                </button>
+              </div>
+
               <button type="button" id="edit_btn" onClick={handleEditProfile}>
                 Edit Profile
               </button>
@@ -255,12 +256,16 @@ const Profile = () => {
                         <br />
                         <br />
                         <label htmlFor="username">Username</label>
+<<<<<<< HEAD
+                        <input type="text" id="username" name="username" defaultValue={user.username} required ref={inputUsernameRef}/>
+=======
                         <input className="profileInput" type="text" id="username" name="username" defaultValue={username} required ref={inputUsernameRef}/>
+>>>>>>> main
                         <br /> 
                         <br />
 
                         <label htmlFor="bio">Bio</label>
-                        <textarea id="bio" name="bio" defaultValue={bio} rows="4" cols="50" required ref={inputBioRef}></textarea>
+                        <textarea id="bio" name="bio" defaultValue={user.bio} rows="4" cols="50" required ref={inputBioRef}></textarea>
                         <br />
                         <br />
                       </div>
@@ -273,16 +278,12 @@ const Profile = () => {
                 </div>
               )}
 
-              <div className="actions_container">
-                <button type="button" id="delete_btn" onClick={handleDeleteAccount}>
-                  Delete Account
-                </button>
-              </div>
+              
             </div>
 
-            <div class="details_container">
-              <div class="row">
-                <div class="column_1">
+            <div className="details_container">
+              <div className="row">
+                <div className="column_1">
 
                   <p>Username </p><br/>
                   <p>Email</p><br/>
@@ -292,31 +293,49 @@ const Profile = () => {
 
                 </div>
 
-                <div class="column_2">
-
-                  <div id="namearea" ref={divUsernameRef}>Zheng Wu Bang</div><br/>
-
-                  <div id="emailarea">wbzheng@gmail.com</div><br/>
-
-                  <div id="genderarea">Male</div><br/>
-
-                  <div id="DOBarea">12/5/2000</div><br/>
-
-                  <div id="DJoinedarea">4/7/2019</div><br/>
-
+                <div className="column_2">
+                  
+                      <div id="namearea" ref={divUsernameRef}>{user&&user.username}</div><br/>
+                      <div id="emailarea">{user&&user.email}</div><br/>
+                      <div id="genderarea">{user&&user.gender}</div><br/>
+                      <div id="DOBarea">{user&&user.DOB}</div><br/>
+                      <div id="DJoinedarea">{user&&user.dJoined}</div><br/>
+              
                 </div>
               </div>
             </div>
 
             <hr/>
 
-            <div class="bio_container">
-              <p id="bio_details" ref={divBioRef}>I like travelling.</p>
+            <div className="bio_container">
+              <p id="bio_details" ref={divBioRef}>{user.bio}</p>
             </div>
           </div>
         </div>
 
-      </div>  
+        <div className={styles.postContainer}>
+          {isLoading ? (
+            <CircularProgress className={styles.loading} />
+          ) : (
+            posts.map((post) => (
+              <PostCard
+                profile={post.profilePicture}
+                key={post.postID}
+                postID={post.postID}
+                username={post.username}
+                location={post.location}
+                rating={post.rating}
+                description={post.description}
+                postimg={PUBLIC_FOLDER + post.images}
+                date={post.createdAt}
+              />
+            ))
+          )}
+        </div>
+      </div>
+
+      
+
   );
       
 };

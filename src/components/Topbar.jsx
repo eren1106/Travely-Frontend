@@ -27,8 +27,9 @@ const Topbar = () => {
   const [searchResult, setSearchResult] = useState([]);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
     localStorage.removeItem("currentUserID");
+    navigate("/login");
+    localStorage.removeItem('user');
   }
 
   // set timer on user input
