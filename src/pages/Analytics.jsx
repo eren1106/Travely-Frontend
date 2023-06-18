@@ -1,184 +1,174 @@
-import React, { useState } from 'react';
-import '../styles/analytics.css';
-import ViewsChart from '../components/ViewsChart';
-import PostReach from '../components/PostReach';
-
+import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import "../styles/analytics.css";
+import ViewsChart from "../components/ViewsChart";
+import PostReach from "../components/PostReach";
+import SideBar from "../components/SideBar";
+import TopBar from "../components/Topbar";
+import { UserContext } from "../userContext";
+import TopPost from "../components/TopPostList";
+import { CircularProgress } from "@mui/material";
 const Travely = () => {
-  const [selectedView, setSelectedView] = useState('month'); 
-  const handleViewChange = (event) => {
-    setSelectedView(event.target.value);
+  const [selectedView, setSelectedView] = useState("month");
+
+  // address to fecth images
+  const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  //context API to get userID
+  const { user } = useContext(UserContext);
+
+  const checkProfileExists = (profile) => {
+    let defaultImg = "defaultProfile.jpeg";
+    if (profile && profile.length) {
+      defaultImg = profile;
+    }
+    return defaultImg;
   };
+
+  //fetch all user post
+  const [isLoading, setIsLoading] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [view,setView] = useState([]);
+  const [filteredView, setFilteredView] = useState();
+  const [rating, setRating] = useState();
+
+
+  //mock user id
+  const userId = "6481966c3137e182902f753d";
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      await getPosts();
+      await getView();
+      setIsLoading(false);
+    };
+    const getView = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3001/api/posts/${userId}/view`
+        );
+        const viewList = res.data;
+        //console.log(viewList);
+        const dates = viewList.map(({ date }) => date);
+        setView(dates);  
+        // Get today's date on local timezone
+        const today = new Date();
+        const timeZoneOffset = today.getTimezoneOffset() * 60000; // Get the time zone offset in milliseconds
+        const localISOTime = new Date(today - timeZoneOffset).toISOString().split("T")[0];
+        // console.log(localISOTime);
+
+        // Filter the views array based on today's date
+        const filteredViews = viewList.filter((view) => view.date === localISOTime);
+        setFilteredView(filteredViews.length);
+        //console.log(filteredViews);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/posts/${userId}`
+        );
+        const userPost = response.data;
+
+        // Sort the post based on rating
+        const sortedPosts = userPost.sort((p1, p2) => p2.rating - p1.rating);
+        setPosts(sortedPosts);
+
+        // Calculate rating
+        const totalRating = userPost.reduce(
+          (total, post) => total + parseFloat(post.rating),
+          0
+        );
+        const averageRating =
+          sortedPosts.length > 0
+            ? (totalRating / sortedPosts.length).toFixed(2)
+            : "N/A";
+        setRating(averageRating);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div>
       <main>
+        <SideBar
+          username={user.username}
+          profile={`${PUBLIC_FOLDER}${checkProfileExists(user.profilePicture)}`}
+          email={user.email}
+        />
+        <TopBar />
         <div className="section">
-          <div className="row">
-            <div className="column">
-              <div className="icon1">
-                <img src="assets/total-visitors.png" alt="" />
+          {isLoading ? (
+            <CircularProgress className="loadingAnalytics" />
+          ) : (
+            <>
+              <div className="row">
+                <div className="column">
+                  <div className="icon1">
+                    <img src={PUBLIC_FOLDER + "total-visitors.png"} alt="" />
+                  </div>
+                  <div className="content">
+                    <p className="total">Visitors (Today)</p>
+                    <p className="num">{filteredView}</p>
+                  </div>
+                </div>
+                <div className="column">
+                  <div className="icon2">
+                    <img src={PUBLIC_FOLDER + "total-posts.png"} alt="" />
+                  </div>
+                  <div className="content">
+                    <p className="total">Total Posts</p>
+                    <p className="num">{posts.length}</p>
+                  </div>
+                </div>
+                <div className="column">
+                  <div className="icon4">
+                    <img src={PUBLIC_FOLDER + "total-likes.png"} alt="" />
+                  </div>
+                  <div className="content">
+                    <p className="total">Rating</p>
+                    <p className="num">{rating}/5.0</p>
+                  </div>
+                </div>
               </div>
-              <div className="content">
-                <p className="total">Visitors (Today)</p>
-                <p className="num">1000</p>
-              </div>
-            </div>
-            <div className="column">
-              <div className="icon2">
-                <img src="assets/total-posts.png" alt="" />
-              </div>
-              <div className="content">
-                <p className="total">Total Posts</p>
-                <p className="num">14,567</p>
-              </div>
-            </div>
-            <div className="column">
-              <div className="icon4">
-                <img src="assets/rating.png" alt="" />
-              </div>
-              <div className="content">
-                <p className="total">Rating</p>
-                <p className="num">4.0/5.0</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="container">
-            <div className="row">
-              <div className="col-view-reach">
-                <div>
-                  <p className="title">View Reach</p>
-                </div>
-                <div>
-                <ViewsChart selectedView={selectedView} />
+              <div className="container">
+                <div className="row">
+                  <div className="col-view-reach">
+                    <div>
+                      <p className="title">View Reach</p>
+                    </div>
+                    <div>
+                      <ViewsChart selectedView={selectedView} />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="container">
-            <div className="row">
-              <div className="col-post-reach">
-                <div>
-                  <p className="title">Post Reach</p>
-                </div>
-                <div>
-                  <PostReach/>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="container">
-            <div className="row">
-              <div className="col-top-post">
-                <div>
-                  <p className="title">Top Posts</p>
+              <div className="container">
+                <div className="row">
+                  <div className="col-post-reach">
+                    <div>
+                      <p className="title">Post Reach</p>
+                    </div>
+                    <div>
+                      <PostReach view={view}/>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="table-top-posts">
-              <table>
-                <thead>
-                  <tr>
-                    <th>
-                      <p className="title-table">No</p>
-                    </th>
-                    <th>
-                      <p className="title-table">Posts</p>
-                    </th>
-                    <th>
-                      <p className="title-table">Rating</p>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div className="list-of-post">
-                        <p className="text">01</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/Bali.jpeg" alt="" />
-                        </div>
-                        <p className="title-of-post">Discover the Magic of Bali: A Journey to Paradise.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">5.0/5.0</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="number-of-post">
-                        <p className="text">02</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/balloonView.jpg" alt="" />
-                        </div>
-                        <p className="title-of-post">Explore the Rich History and Culture of Turkey: A Journey to the Crossroads of East and West.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">4.9/5.0</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="number-of-post">
-                        <p className="text">03</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/china-scene.jpg" alt="" />
-                        </div>
-                        <p className="title-of-post">Journey through Time and Tradition: Experience the Wonders of China.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">4.5/5.0</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="number-of-post">
-                        <p className="text">04</p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="posts">
-                        <div className="image">
-                          <img src="assets/australia-scene.jpeg" alt="" />
-                        </div>
-                        <p className="title-of-post">Adventure Down Under: Discovering the Natural Wonders of Australia.</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text">4.3/5.0</p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="row">
-              <div className="col-view-more">
-                <p className="view-more">View More...</p>
-              </div>
-            </div>
-          </div>
+              <TopPost post={posts} />
+            </>
+          )}
         </div>
       </main>
     </div>
   );
-}
+};
 
 export default Travely;

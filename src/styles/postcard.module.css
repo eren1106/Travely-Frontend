@@ -34,6 +34,7 @@
 .iconList {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .iconList li i{

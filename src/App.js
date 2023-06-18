@@ -6,7 +6,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register"
 import Analytics from "./pages/Analytics";
 import ForgetPassword from "./pages/ForgetPassword"
-import GoogleLogin from "./pages/GoogleLogin";
 import GoogleLogout from "./pages/GoogleLogout";
 import Search from "./pages/Search"
 import ProtectedRoutes from "./components/ProtectedRoutes";
@@ -15,6 +14,10 @@ import Profile from "./pages/Profile";
 
 
 function App() {
+
+  //context API to get userID
+  const { user } = useContext(UserContext);
+
   return (
     <div>
       <Routes>

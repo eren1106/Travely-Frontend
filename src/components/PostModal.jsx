@@ -4,50 +4,20 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import OutlinedFlagTwoToneIcon from "@mui/icons-material/OutlinedFlagTwoTone";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import axios from 'axios'
-
+import { UserContext } from "../userContext";
+import { useContext } from "react";
 const PostModal = (props) => {
   
 
-  //mock user id
-  const userID = "6481966c3137e182902f753d";
-  //handle form submit
-  // (able to upload single file with unique name)
-  // const handleSubmit = async(e) =>{
-  //   e.preventDefault();  
-  //   const newPost = {
-  //     userID : userID, //TODO : set userID dynamically
-  //     description : textareaValue,
-  //     location : selectedOption,
-  //   }
-  //   if (fileArray.length !== 0) {
-  //     const data = new FormData();
-  //     const filenames = []; // Create an empty array to store filenames
-
-  //     fileArray.forEach(async (currentFile) => {
-        
-  //       const fileName = Date.now() + currentFile.name;
-  //       data.append("name", fileName);
-  //       data.append("file", currentFile);
-  //       filenames.push(fileName); // Push the filename into the array
-  //     });
-  //     newPost.images = filenames;
-  //     try {
-  //       console.log(data);
-  //       await axios.post("http://localhost:3001/api/upload", data);
-  //     } catch (err) {}
-  //   }
-  //   try {
-  //     await axios.post("http://localhost:3001/api/posts", newPost);
-  //     window.location.reload();
-  //   } catch (err) {}
-  // }
+  //context API to get userID
+  const { user } = useContext(UserContext);
 
 
   // handle multiple sub
   const handleSubmit = async(e) =>{
     e.preventDefault();  
     const newPost = {
-      userID : userID, //TODO : set userID dynamically
+      userID : user._id, //TODO : set userID dynamically
       description : textareaValue,
       location : selectedOption,
     }

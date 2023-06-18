@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styles from '../styles/registerLogin.module.css';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import GoogleLogin from "./GoogleLogin";
-
+import { UserContext } from '../userContext';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,9 +14,10 @@ import GoogleIcon from '@mui/icons-material/Google';
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
-
   const navigate = useNavigate();
   const { handleSubmit, register, formState: { errors }  } = useForm();
+
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = async (data) => {
     try {
@@ -26,6 +27,9 @@ const Login = () => {
       // continue the login logic
       // localStorage.setItem('token', res.data.token);
       // localStorage.setItem('user_id', res.data.id);
+      console.log(response.data)
+      setUser(response.data);
+      localStorage.setItem('user', JSON.stringify(response.data));
       localStorage.setItem("currentUserID", response.data._id);
       navigate('/');
     } catch (error) {
