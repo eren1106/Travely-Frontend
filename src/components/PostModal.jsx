@@ -10,14 +10,15 @@ const PostModal = (props) => {
   
 
   //context API to get userID
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
 
 
   // handle multiple sub
   const handleSubmit = async(e) =>{
     e.preventDefault();  
+    const userID = localStorage.getItem("currentUserID");
     const newPost = {
-      userID : user._id, //TODO : set userID dynamically
+      userID : userID, //TODO : set userID dynamically
       description : textareaValue,
       location : selectedOption,
     }
