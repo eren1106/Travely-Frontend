@@ -150,7 +150,7 @@ const Travely = () => {
                 </div>
                 <div className="column">
                   <div className="icon4">
-                    <img src={PUBLIC_FOLDER + "total-likes.png"} alt="" />
+                    <img src={PUBLIC_FOLDER + "rating.png"} alt="" />
                   </div>
                   <div className="content">
                     <p className="total">Rating</p>
