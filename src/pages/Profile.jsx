@@ -17,6 +17,10 @@ const Profile = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+
+  const { setUsers } = useContext(UserContext);
+
+
   // const [username, setUsername] = useState(user && user.username);
   // const [profile, setProfile] = useState("");
   // const [bio, setBio] = useState('I like travelling.');
@@ -147,6 +151,12 @@ const Profile = () => {
       inputUsernameRef.current.value = usernamenew;
       inputBioRef.current.value = bionew;
 
+      // update local storage
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      storedUser.username = usernamenew;
+      storedUser.bio = bionew;
+      localStorage.setItem('user', JSON.stringify(storedUser));
+      setUsers(storedUser);
       // setUsername(usernamenew);
 
       console.log('Username and bio updated successfully in the database.');
