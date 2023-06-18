@@ -10,7 +10,7 @@ import GoogleLogin from "./pages/GoogleLogin";
 import GoogleLogout from "./pages/GoogleLogout";
 import Search from "./pages/Search"
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import ProfilePage from "./pages/Profile"
+
 import Profile from "./pages/Profile";
 
 

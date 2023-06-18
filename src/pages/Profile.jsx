@@ -1,25 +1,138 @@
-import React, { useState, useLayoutEffect, useRef} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useLayoutEffect, useEffect, useRef} from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import "../styles/profile.css";
+import axios from "axios"
+import TopBar from "../components/Topbar";
+import SideBar from "../components/SideBar";
+import PostCard from "../components/PostCard";
+import styles from "../styles/home.module.css";
+import { CircularProgress } from "@mui/material";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('Zheng Wu Bang');
+  const {userID} = useParams();
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [username, setUsername] = useState('');
   const [bio, setBio] = useState('I like travelling.');
   const [profilePic, setProfilePic] = useState('assets/profile.jpg');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [IsAccountDeleted, setIsAccountDeleted] = useState(false);
   const [originalUsername, setOriginalUsername] = useState('');
   const [originalBio, setOriginalBio] = useState('');
+  
+  
+  const [profile, setProfile] = useState("");
+  
 
+  const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
   // Create refs for DOM elements
   const divUsernameRef = useRef(null);
   const divBioRef = useRef(null);
   const inputUsernameRef = useRef(null);
   const inputBioRef = useRef(null);
 
-  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const [userDataResponse, userPostsResponse] = await Promise.all([
+          axios.get(`http://localhost:3001/api/users/${userID}`),
+          axios.get(`http://localhost:3001/api/users/${userID}/posts`),
+        ]);
 
+        setUser(userDataResponse.data);
+        setPosts(userPostsResponse.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    };
+
+      /*
+      setIsLoading(true);
+
+      await getPosts();
+      await getUser();
+
+      setIsLoading(false);
+    };
+    const getPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/posts/${userID}");
+        const userPosts = response.data;
+        //console.log(posts);
+        setPosts(userPosts);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const getUser = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/users/${userID}`);
+        setUser(res.data);
+        setUsername(res.data.username);
+        setProfilePic(checkProfileExists(res.data.profilePicture));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    */
+    fetchUserData();
+  }, [userID]);
+
+  const checkProfileExists = (profile) => {
+    let defaultImg = "";
+    if (profile.length === 0) {
+      defaultImg = "defaultProfile.jpeg";
+    } else {
+      defaultImg = profile;
+    }
+    return defaultImg;
+  };
+      /*
+      setIsLoading(true);
+
+      await getPosts();
+      await getUser();
+
+      setIsLoading(false);
+      
+    };
+    const getPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/posts");
+        const posts = response.data;
+        //console.log(posts);
+        setPosts(
+          // sort according to date
+          posts.sort((p1, p2) => {
+            return new Date(p2.createdAt) - new Date(p1.createdAt);
+          })
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const getUser = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/users/${userID}`);
+        setUser(res.data);
+        setProfile(checkProfileExists(res.data.profilePicture));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+    
+  }, [userID]);
+  */
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+  
   const handleChangeProfilePic = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -39,7 +152,7 @@ const Profile = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async() => {
     // Handle saving the profile changes
     // Update the state with new username and bio values
     var usernamenew = inputUsernameRef.current.value;
@@ -60,97 +173,36 @@ const Profile = () => {
     divBio.innerHTML = bionew;
 
     setIsEditModalOpen(false);
+
+    try {
+      await axios.put(`http://localhost:3001/api/users/${userID}`, {
+        username: usernamenew,
+        bio: bionew,
+      });
+      console.log('Username and bio updated successfully in the database.');
+    } catch (error) {
+      console.error('Error updating username and bio in the database', error);
+    }
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async() => {
     if (window.confirm('Do you confirm to delete account?')) {
       // Handle account deletion
       // Redirect to the appropriate route/page
-      deleteAccount()
-        .then(() => {
+      try {
+        const response = await axios.delete(`/api/users/${userID}`);
+        if (response.status === 200) {
           setIsAccountDeleted(true);
-          navigate.push('/login');
-        })
-
-        .catch((error) =>{
-          console.error("Error deleting account", error);
-        });
+          // Redirect to home page or any other desired page
+          navigate("/login");
+        } else {
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error('Error deleting account', error);
+      }
     }
-  }
-  
-
-  const deleteAccount = () =>{
-    return new Promise((resolve, reject)=> {
-      setTimeout(()=>{
-        resolve();
-      },2000);
-    });
   };
-
-  /*
-  useLayoutEffect(() => {
-    const inputUsername = inputUsernameRef.current;
-    const inputBio = inputBioRef.current;
-  
-    if (inputUsername && inputBio) {
-      const originalUsername = inputUsername.defaultValue;
-      const originalBio = inputBio.defaultValue;
-  
-      const handleMouseOverUsername = () => {
-        if (inputUsername.value === username) {
-          inputUsername.value = '';
-        }
-      };
-      
-      const handleMouseOverBio = () => {
-        if (inputBio.value === bio) {
-          inputBio.value = '';
-        }
-      };
-      
-      const handleMouseOutUsername = () => {
-        if (inputUsername.value === '') {
-          inputUsername.value = username;
-        }
-      };
-      
-      const handleMouseOutBio = () => {
-        if (inputBio.value === '') {
-          inputBio.value = bio;
-        }
-      };      
-  
-      const handleClickUsername = () => {
-        if (inputUsername.value === originalUsername) {
-          inputUsername.value = '';
-        }
-      };
-  
-      const handleClickBio = () => {
-        if (inputBio.value === originalBio) {
-          inputBio.value = '';
-        }
-      };
-  
-      inputUsername.addEventListener('mouseover', handleMouseOverUsername);
-      inputBio.addEventListener('mouseover', handleMouseOverBio);
-      inputUsername.addEventListener('mouseout', handleMouseOutUsername);
-      inputBio.addEventListener('mouseout', handleMouseOutBio);
-      inputUsername.addEventListener('click', handleClickUsername);
-      inputBio.addEventListener('click', handleClickBio);
-  
-      // Clean up event listeners on component unmount
-      return () => {
-        inputUsername.removeEventListener('mouseover', handleMouseOverUsername);
-        inputBio.removeEventListener('mouseover', handleMouseOverBio);
-        inputUsername.removeEventListener('mouseout', handleMouseOutUsername);
-        inputBio.removeEventListener('mouseout', handleMouseOutBio);
-        inputUsername.removeEventListener('click', handleClickUsername);
-        inputBio.removeEventListener('click', handleClickBio);
-      };
-    }
-  }, []);
-  */
 
   
   useLayoutEffect(() => {
@@ -216,9 +268,13 @@ const Profile = () => {
     return <div>Account successfully deleted!</div>;
   }
 
+  
+
   return (
   
       <div id="wrapper">
+        <SideBar loading={isLoading} username={user&&user.username} profile = {PUBLIC_FOLDER + profile} email={user&&user.email}/>
+        <TopBar />
         <div className="photo_container">
           <div className="photo" id="pic" style={{ textAlign: 'center' }}>
             <img src={profilePic} alt="Profile" />
@@ -233,6 +289,12 @@ const Profile = () => {
           <div className="info_container">
             <div className="personal_container">
               <div className="details_title">Personal Details</div>
+              <div className="actions_container">
+                <button type="button" id="delete_btn" onClick={handleDeleteAccount}>
+                  Delete Account
+                </button>
+              </div>
+
               <button type="button" id="edit_btn" onClick={handleEditProfile}>
                 Edit Profile
               </button>
@@ -273,11 +335,7 @@ const Profile = () => {
                 </div>
               )}
 
-              <div className="actions_container">
-                <button type="button" id="delete_btn" onClick={handleDeleteAccount}>
-                  Delete Account
-                </button>
-              </div>
+              
             </div>
 
             <div class="details_container">
@@ -316,7 +374,29 @@ const Profile = () => {
           </div>
         </div>
 
-      </div>  
+        <div className={styles.postContainer}>
+          {isLoading ? (
+            <CircularProgress className={styles.loading} />
+          ) : (
+            posts.map((post) => (
+              <PostCard
+                profile={post.profilePicture}
+                key={post.postID}
+                postID={post.postID}
+                username={post.username}
+                location={post.location}
+                rating={post.rating}
+                description={post.description}
+                postimg={PUBLIC_FOLDER + post.images}
+                date={post.createdAt}
+              />
+            ))
+          )}
+        </div>
+      </div>
+
+      
+
   );
       
 };
