@@ -60,7 +60,7 @@ const PostCard = (props) => {
     try {
       const res =  await axios.post(`http://localhost:3001/api/posts/${props.postID}/view`, {
          userID: props.userID,
-         date : "2023-06-13" // can set to todayDate, fixed String to manipulate the date 
+         date : todayDate //"2023-06-13" // can set to todayDate, fixed String to manipulate the date 
       });
       console.log(res.data);
       navigate(`/post/${props.postID}`);
@@ -79,6 +79,7 @@ const PostCard = (props) => {
         username={props.username}
         location={props.location}
         datetime={props.date}
+        userID = {props.userID}
       />
       <PostText description={props.description} />
       <div className={styles.imageContainer}>

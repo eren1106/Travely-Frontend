@@ -16,6 +16,8 @@ const Travely = () => {
 
   //context API to get userID
   const { user } = useContext(UserContext);
+  //mock user id
+  const userId = user._id;
 
   const checkProfileExists = (profile) => {
     let defaultImg = "defaultProfile.jpeg";
@@ -31,15 +33,15 @@ const Travely = () => {
   const [view,setView] = useState([]);
   const [filteredView, setFilteredView] = useState();
   const [rating, setRating] = useState();
+  const [profileView, setProfileView] = useState([]);
 
-
-  //mock user id
-  const userId = "6481966c3137e182902f753d";
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       await getPosts();
       await getView();
+      await getProfileView();
       setIsLoading(false);
     };
     const getView = async () => {
@@ -65,6 +67,21 @@ const Travely = () => {
         console.log(error);
       }
     };
+
+    const getProfileView = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3001/api/posts/${userId}/profileView`
+        );
+        const profileViewList = res.data;
+        //console.log(profileViewList);
+        const dates = profileViewList.map(({ date }) => date);
+        setProfileView(dates);  
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const getPosts = async () => {
       try {
         const response = await axios.get(
@@ -144,7 +161,7 @@ const Travely = () => {
                       <p className="title">View Reach</p>
                     </div>
                     <div>
-                      <ViewsChart selectedView={selectedView} />
+                      <ViewsChart profileview={profileView}/>
                     </div>
                   </div>
                 </div>
