@@ -256,11 +256,7 @@ const Profile = () => {
                         <br />
                         <br />
                         <label htmlFor="username">Username</label>
-<<<<<<< HEAD
-                        <input type="text" id="username" name="username" defaultValue={user.username} required ref={inputUsernameRef}/>
-=======
                         <input className="profileInput" type="text" id="username" name="username" defaultValue={username} required ref={inputUsernameRef}/>
->>>>>>> main
                         <br /> 
                         <br />
 
