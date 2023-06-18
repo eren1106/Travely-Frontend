@@ -63,7 +63,7 @@ const ViewsChart = (props) => {
   // logic to determine week
   // Calculate the start date 5 weeks ago from today
   const startDate = new Date();
-  startDate.setDate(startDate.getDate() - 35);
+  startDate.setDate(startDate.getDate() - 34);
   startDate.setHours(0, 0, 0, 0);
 
   // Create an array to store the weekly counts
@@ -75,13 +75,12 @@ const ViewsChart = (props) => {
     currentDate.setDate(currentDate.getDate() + i * 7);
 
     const weekStart = currentDate.getTime();
-    const weekEnd = new Date(currentDate).setDate(currentDate.getDate() + 6);
+    const weekEnd = new Date(currentDate).setDate(currentDate.getDate() + 7);
 
     const count = view.filter((date) => {
       const dateObj = new Date(date);
       return dateObj >= weekStart && dateObj <= weekEnd;
     }).length;
-
     weeks.push({ x: weekStart, y: count });
   }
   // const days = [
