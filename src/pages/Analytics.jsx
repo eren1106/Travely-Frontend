@@ -17,7 +17,7 @@ const Travely = () => {
   const { user } = useContext(UserContext);
   //mock user id
   const userId = user._id;
-
+  console.log(userId);
   const checkProfileExists = (profile) => {
     let defaultImg = "defaultProfile.jpeg";
     if (profile && profile.length) {
@@ -90,7 +90,7 @@ const Travely = () => {
     const getPosts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/posts/${userId}`
+          `http://localhost:3001/api/posts/user/${userId}`
         );
         const userPost = response.data;
 
