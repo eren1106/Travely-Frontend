@@ -161,6 +161,9 @@ const Post = () => {
       });
       console.log(res.data);
       setRating(n);
+
+      const updatedPost = await axios.get(`http://localhost:3001/api/posts/${id}`); // fetch post data
+      setPostData(updatedPost.data);
     }
     catch (err) {
       console.log(err);
@@ -176,6 +179,9 @@ const Post = () => {
       const res = await axios.delete(`http://localhost:3001/api/posts/${id}/rating/${currentUser._id}`);
       console.log(res.data);
       setRating(0);
+
+      const updatedPost = await axios.get(`http://localhost:3001/api/posts/${id}`); // fetch post data
+      setPostData(updatedPost.data);
     }
     catch (err) {
       console.log(err);
@@ -331,9 +337,9 @@ const Post = () => {
 
                 {/* POST STATISTIC */}
                 <div className={`${styles.ratingAndComments}`}>
-                  <p className={`${styles.ratingText} ${styles.dataText}`}>4.5 average rating</p>
+                  <p className={`${styles.ratingText} ${styles.dataText}`}>{`${postData.rating} average rating`}</p>
                   <p className={`${styles.commentsText} ${styles.dataText}`}>{`${comments.length} comments`}</p>
-                  <p className={`${styles.viewsText} ${styles.dataText}`}>789 views</p>
+                  <p className={`${styles.viewsText} ${styles.dataText}`}>{`${postData.numOfVisitors} views`}</p>
                 </div>
 
               </section>

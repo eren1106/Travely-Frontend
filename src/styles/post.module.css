@@ -89,6 +89,15 @@
   color: var(--grey-text);
 }
 
+.topInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.userName {
+  margin: 0;
+}
 
 /********* CONTENT SECTION *********/
 .contentSection {

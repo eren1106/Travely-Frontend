@@ -12,3 +12,11 @@ body {
   margin-top: 15em;
 }
 
+.postContainer {
+  position: absolute;
+  margin-top: 6em;
+  margin-left: 24em;
+  width: 50%;
+  height: 80%;
+}
+
