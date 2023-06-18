@@ -224,7 +224,7 @@ const Profile = () => {
             <img src={profilePic} alt="Profile" />
             <div className="overlay">
               <button className="change-btn">Change Picture</button>
-              <input type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic}/>
+              <input className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic}/>
             </div>
           </div>
         </div>
@@ -255,7 +255,7 @@ const Profile = () => {
                         <br />
                         <br />
                         <label htmlFor="username">Username</label>
-                        <input type="text" id="username" name="username" defaultValue={username} required ref={inputUsernameRef}/>
+                        <input className="profileInput" type="text" id="username" name="username" defaultValue={username} required ref={inputUsernameRef}/>
                         <br /> 
                         <br />
 

@@ -26,6 +26,11 @@ const Topbar = () => {
   const [input, setInput] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem("currentUserID");
+  }
+
   // set timer on user input
   let timeoutId;
   const handleInputChange = (e) => {
@@ -57,7 +62,7 @@ const Topbar = () => {
   useEffect(() => {
     const fetchData = async () => {
       await getPosts();
-      console.log(searchResult);
+      //console.log(searchResult);
     };
     const getPosts = async () => {
       try {
@@ -77,11 +82,6 @@ const Topbar = () => {
     };
     fetchData();
   }, [input]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("currentUserID");
-    navigate("/login");
-  }
 
   return (
     <header className={styles.header}>
@@ -112,13 +112,13 @@ const Topbar = () => {
 
         <div className={styles.iconContainer}>
           <ul>
-            <Button onClick={handleLogout}>
+            <Link to="/login" onClick={handleLogout}>
               <li className={styles.listItem}>
                 <i>
                   <LogoutOutlinedIcon />
                 </i>
               </li>
-            </Button>
+            </Link>
           </ul>
         </div>
       </div>

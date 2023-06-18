@@ -13,7 +13,7 @@ const SideBar = (props) => {
 
   const handleLogout = () => {
     localStorage.removeItem("currentUserID");
-    navigate("/login");
+    localStorage.removeItem('user');
   }
   return (
     <nav className={styles.sidebar}>
@@ -44,17 +44,17 @@ const SideBar = (props) => {
         </li>
 
         <li>
-          <a href="userAnalytics.html">
+          <Link to="/analytics">
             <i><InsertChartOutlinedIcon/></i>
             <span className="links_name">User Analytics</span>
-          </a>
+          </Link>
         </li>
 
         <li className={styles.logoutContainer}>
-          <Button onClick={handleLogout} className={styles.logout}>
+          <Link to="/login" onClick={handleLogout} className={styles.logout}>
             <i><LogoutOutlinedIcon/></i>
             <span>Log Out</span>
-          </Button>
+          </Link>
         </li>
       </ul>
 

@@ -215,7 +215,6 @@ const Post = () => {
     catch (err) {
       console.log(err);
     }
-
     setLoading(false);
     setShowDeleteAlert(false);
     // TODO: show react toast

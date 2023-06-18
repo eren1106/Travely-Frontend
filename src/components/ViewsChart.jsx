@@ -4,41 +4,120 @@ import { Line } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement);
 
-const ViewsChart = () => {
+const ViewsChart = (props) => {
   const [selectedView, setSelectedView] = useState('month'); // Default selected view is 'month'
+  const view = props.profileview;
+  console.log(view);
 
-  const days = [
-    { x: Date.parse('2023-04-01 00:00:00 GMT+0800'), y: 5 },
-    { x: Date.parse('2023-04-02 00:00:00 GMT+0800'), y: 20 },
-    { x: Date.parse('2023-04-03 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-04-04 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-04-05 00:00:00 GMT+0800'), y: 20 },
-    { x: Date.parse('2023-04-06 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-04-07 00:00:00 GMT+0800'), y: 10 },
-  ];
-
-  const weeks = [
-    { x: Date.parse('2023-04-02 00:00:00 GMT+0800'), y: 90 },
-    { x: Date.parse('2023-04-09 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-04-16 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-04-23 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-04-30 00:00:00 GMT+0800'), y: 30 },
-  ];
-
+  //month logic
+  const monthCounts = {};
+  for (const date of view) {
+    const month = date.substring(0, 7);
+    monthCounts[month] = (monthCounts[month] || 0) + 1;
+  }
   const months = [
-    { x: Date.parse('2023-01-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-02-01 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-03-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-04-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-05-01 00:00:00 GMT+0800'), y: 40 },
-    { x: Date.parse('2023-06-01 00:00:00 GMT+0800'), y: 10 },
-    { x: Date.parse('2023-07-01 00:00:00 GMT+0800'), y: 20 },
-    { x: Date.parse('2023-08-01 00:00:00 GMT+0800'), y: 50 },
-    { x: Date.parse('2023-09-01 00:00:00 GMT+0800'), y: 70 },
-    { x: Date.parse('2023-10-01 00:00:00 GMT+0800'), y: 30 },
-    { x: Date.parse('2023-11-01 00:00:00 GMT+0800'), y: 70 },
-    { x: Date.parse('2023-12-01 00:00:00 GMT+0800'), y: 20 },
+    { x: Date.parse("2023-01-01"), y: monthCounts["2023-01"] || 0 },
+    { x: Date.parse("2023-02-01"), y: monthCounts["2023-02"] || 0 },
+    { x: Date.parse("2023-03-01"), y: monthCounts["2023-03"] || 0 },
+    { x: Date.parse("2023-04-01"), y: monthCounts["2023-04"] || 0 },
+    { x: Date.parse("2023-05-01"), y: monthCounts["2023-05"] || 0 },
+    { x: Date.parse("2023-06-01"), y: monthCounts["2023-06"] || 0 },
+    { x: Date.parse("2023-07-01"), y: monthCounts["2023-07"] || 0 },
+    { x: Date.parse("2023-08-01"), y: monthCounts["2023-08"] || 0 },
+    { x: Date.parse("2023-09-01"), y: monthCounts["2023-09"] || 0 },
+    { x: Date.parse("2023-10-01"), y: monthCounts["2023-10"] || 0 },
+    { x: Date.parse("2023-11-01"), y: monthCounts["2023-11"] || 0 },
+    { x: Date.parse("2023-12-01"), y: monthCounts["2023-12"] || 0 },
   ];
+
+  // Get today's date
+  const today = new Date();
+
+  // Calculate the recent past 7 days starting from today
+  const pastDates = [];
+  for (let i = 6; i > 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i + 1);
+    pastDates.push(date.toISOString().split("T")[0]);
+  }
+  //console.log(pastDates);
+  // Count the occurrences of matching dates
+  const countOccurrences = (dates, targetDate) => {
+    let count = 0;
+    for (const date of dates) {
+      if (date === targetDate) {
+        count++;
+      }
+    }
+    return count;
+  };
+
+  // Generate the array of objects in the required format
+  const days = pastDates.map((date) => {
+    const count = countOccurrences(view, date);
+    return { x: Date.parse(date), y: count };
+  });
+
+  //console.log(days);
+
+  // logic to determine week
+  // Calculate the start date 5 weeks ago from today
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 35);
+  startDate.setHours(0, 0, 0, 0);
+
+  // Create an array to store the weekly counts
+  const weeks = [];
+
+  // Iterate over the past 5 weeks
+  for (let i = 0; i < 5; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(currentDate.getDate() + i * 7);
+
+    const weekStart = currentDate.getTime();
+    const weekEnd = new Date(currentDate).setDate(currentDate.getDate() + 6);
+
+    const count = view.filter((date) => {
+      const dateObj = new Date(date);
+      return dateObj >= weekStart && dateObj <= weekEnd;
+    }).length;
+
+    weeks.push({ x: weekStart, y: count });
+  }
+  // const days = [
+  //   { x: Date.parse('2023-04-01'), y: 5 },
+  //   { x: Date.parse('2023-04-02'), y: 20 },
+  //   { x: Date.parse('2023-04-03'), y: 10 },
+  //   { x: Date.parse('2023-04-04'), y: 30 },
+  //   { x: Date.parse('2023-04-05'), y: 20 },
+  //   { x: Date.parse('2023-04-06'), y: 50 },
+  //   { x: Date.parse('2023-04-07'), y: 10 },
+  // ];
+
+  // const weeks = [
+  //   { x: Date.parse('2023-04-02'), y: 90 },
+  //   { x: Date.parse('2023-04-09'), y: 50 },
+  //   { x: Date.parse('2023-04-16'), y: 30 },
+  //   { x: Date.parse('2023-04-23'), y: 50 },
+  //   { x: Date.parse('2023-04-30'), y: 30 },
+  // ];
+
+  // const months = [
+  //   { x: Date.parse('2023-01-01'), y: 10 },
+  //   { x: Date.parse('2023-02-01'), y: 30 },
+  //   { x: Date.parse('2023-03-01'), y: 10 },
+  //   { x: Date.parse('2023-04-01'), y: 10 },
+  //   { x: Date.parse('2023-05-01'), y: 40 },
+  //   { x: Date.parse('2023-06-01'), y: 10 },
+  //   { x: Date.parse('2023-07-01'), y: 20 },
+  //   { x: Date.parse('2023-08-01'), y: 50 },
+  //   { x: Date.parse('2023-09-01'), y: 70 },
+  //   { x: Date.parse('2023-10-01'), y: 30 },
+  //   { x: Date.parse('2023-11-01'), y: 70 },
+  //   { x: Date.parse('2023-12-01'), y: 20 },
+  // ];
+
+
 
   const handleViewChange = (event) => {
     setSelectedView(event.target.value);
