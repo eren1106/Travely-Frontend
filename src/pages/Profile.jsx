@@ -82,6 +82,7 @@ const Profile = () => {
   }, [id]);
 
   const checkProfileExists = (profile) => {
+    console.log(profile);
     let defaultImg = "";
     if (profile.length === 0) {
       defaultImg = "defaultProfile.jpeg";
@@ -95,16 +96,10 @@ const Profile = () => {
   //   setUsername(event.target.value);
   // };
 
-  const handleChangeProfilePic = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        setProfilePic(reader.result);
-      });
-      reader.readAsDataURL(file);
-    }
-  };
+
+
+  
+
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
@@ -187,66 +182,6 @@ const Profile = () => {
   };
 
 
-  // useLayoutEffect(() => {
-  //   displayCurrentUserInfo();
-  // }, [divUsernameRef, divBioRef, username]);
-
-  // const displayCurrentUserInfo = () => {
-  //     const divusername = divUsernameRef.current;
-  //     const divBio = divBioRef.current;
-
-  //     if (divusername && divBio) {
-  //       const usernamenew = divusername.innerHTML;
-  //       const bionew = divBio.innerHTML;
-
-  //       if (inputUsernameRef.current && inputBioRef.current) {
-  //         const inputUsername = inputUsernameRef.current;
-  //         const inputBio = inputBioRef.current;
-
-  //         inputUsername.value = usernamenew === user.username ? '' : usernamenew;
-  //         inputBio.value = bionew === bio ? '' : bionew;
-
-
-  //         inputUsername.addEventListener('mouseover', () => {
-  //           if (inputUsername.value === usernamenew) {
-  //             inputUsername.value = '';
-  //           }
-  //         });
-
-  //         inputBio.addEventListener('mouseover', () => {
-  //           if (inputBio.value === bionew) {
-  //             inputBio.value = '';
-  //           }
-  //         });
-
-  //         inputUsername.addEventListener('mouseout', () => {
-  //           if (inputUsername.value === '') {
-  //             inputUsername.value = usernamenew;
-  //           }
-  //         });
-
-  //         inputBio.addEventListener('mouseout', () => {
-  //           if (inputBio.value === '') {
-  //             inputBio.value = bionew;
-  //           }
-  //         });
-
-  //         inputUsername.addEventListener('click', () => {
-  //           inputUsername.value = '';
-  //         });
-
-  //         inputBio.addEventListener('click', () => {
-  //           inputBio.value = '';
-  //         });
-  //       }
-  //     }
-
-  // };
-
-  // if (IsAccountDeleted) {
-  //   // Render a message or redirect to a different page after account deletion
-  //   return <div>Account successfully deleted!</div>;
-  // }
 
   return (
 
@@ -259,14 +194,13 @@ const Profile = () => {
           <TopBar />
           <div className="photo_container">
             <div className="photo" id="pic" style={{ textAlign: 'center' }}>
-              <img src={profilePic} alt="Profile" />
+              <img src={PUBLIC_FOLDER + checkProfileExists(user.profilePicture)} alt="Profile" />
               <div className="overlay">
                 <button className="change-btn">Change Picture</button>
-                <input className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic} />
+                <input className="profileInput" type="file" id="profile-pic" accept="image/*" />
               </div>
             </div>
           </div>
-
           <div className="content_container">
             <div className="info_container">
               <div className="personal_container">
