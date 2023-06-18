@@ -20,7 +20,7 @@ const PostModal = (props) => {
     const newPost = {
       userID : userID, //TODO : set userID dynamically
       description : textareaValue,
-      location : selectedOption,
+      location : textareaLocationValue,
     }
     if (fileArray.length !== 0) {
      
@@ -45,20 +45,21 @@ const PostModal = (props) => {
       window.location.reload();
     } catch (err) {}
   }
+
   // dropdown menu
-  const [isOptionMenuActive, setOptionMenuActive] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Country");
+  // const [isOptionMenuActive, setOptionMenuActive] = useState(false);
+  // const [selectedOption, setSelectedOption] = useState("Country");
 
-  const toggleOptionMenu = () => {
-    setOptionMenuActive(!isOptionMenuActive);
-  };
+  // const toggleOptionMenu = () => {
+  //   setOptionMenuActive(!isOptionMenuActive);
+  // };
 
-  const handleOptionSelection = (optionText) => {
-    setSelectedOption(optionText);
-    setOptionMenuActive(false);
-  };
+  // const handleOptionSelection = (optionText) => {
+  //   setSelectedOption(optionText);
+  //   setOptionMenuActive(false);
+  // };
 
-  //text area
+  //text area for user input
   const [textareaValue, setTextareaValue] = useState("");
   const handleTextareaChange = (event) => {
       setTextareaValue(event.target.value);
@@ -69,6 +70,17 @@ const PostModal = (props) => {
     setTextareaValue("");
   };
 
+
+  //text area for user input location
+  const [textareaLocationValue, setTextareaLocationValue] = useState("");
+  const handleTextareaLocationChange = (event) => {
+      setTextareaLocationValue(event.target.value);
+      console.log(event.target.value)
+  };
+  
+  const handleTextareaLocationFocus = () => {
+    setTextareaLocationValue("");
+  };
 
   // upload, display, delete image
   const [fileArray, setFileArray] = useState([]);
@@ -124,7 +136,23 @@ const PostModal = (props) => {
             </div>
           </div>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div className={`${styles.selectMenu} ${ isOptionMenuActive ? styles.active : ""}`}>
+            <textarea
+              spellCheck={false}
+              placeholder="What's on your mind ?"
+              value={textareaValue}
+              onChange={handleTextareaChange}
+              onFocus={handleTextareaFocus}
+              className={styles.textAreaPost}
+            ></textarea>
+            <input
+              spellCheck={false}
+              className={styles.textAreaSmall}
+              placeholder="Enter location"
+              value={textareaLocationValue}
+              onChange={handleTextareaLocationChange}
+              onFocus={handleTextareaLocationFocus}
+            ></input>
+            {/* <div className={`${styles.selectMenu} ${ isOptionMenuActive ? styles.active : ""}`}>
               <div className={styles.selectBtn} onClick={toggleOptionMenu}>
                 <span className={styles.sBtnText}>{selectedOption}</span>
                 <i>
@@ -205,14 +233,7 @@ const PostModal = (props) => {
                   <span className={styles.optionText}>USA</span>
                 </li>
               </ul>
-            </div>
-            <textarea
-              spellCheck={false}
-              placeholder="What's on your mind ?"
-              value={textareaValue}
-              onChange={handleTextareaChange}
-              onFocus={handleTextareaFocus}
-            ></textarea>
+            </div> */}
             <div className={styles.uploadContainer}>
               <output>{displayFile(fileArray)}</output>
               <label className={styles.fileLabel}>
@@ -227,6 +248,7 @@ const PostModal = (props) => {
                 />
               </label>
             </div>
+            
             <div className={styles.button}>
               <button className={styles.send} type="submit">Post</button>
             </div>

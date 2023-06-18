@@ -9,11 +9,14 @@ import { Button } from "@mui/material";
 
 const Topbar = () => {
 
+
+  const [loading, setLoading] = useState(true);
+
   //navigate to post page
   const navigate = useNavigate();
   const handleClick = () =>{
     if (searchResult.length === 0){
-      navigate("/search" , { state: { searchResult , notFound:true} });
+      return;
     }else {
       navigate("/search" , { state: { searchResult , notFound:false} });
     }
@@ -51,7 +54,7 @@ const Topbar = () => {
     const postUsername = post.username.toLowerCase();
     const postLocation = post.location.toLowerCase();
     if (inputValue.length === 0){
-      return true;
+      return false;
     }
     if (postDescription.includes(inputValue) ||postUsername.includes(inputValue) ||postLocation.includes(inputValue)) {
       return true;
@@ -62,8 +65,10 @@ const Topbar = () => {
   //fetch data
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(false);
       await getPosts();
       //console.log(searchResult);
+      setLoading(true);
     };
     const getPosts = async () => {
       try {
@@ -104,9 +109,9 @@ const Topbar = () => {
               onChange={handleInputChange}
             />
             <a className={styles.searchBtn} onClick={handleClick}>
-              <i className={styles.searchIcon}>
+              {loading &&<i className={styles.searchIcon}>
                 <SearchOutlinedIcon />
-              </i>
+              </i>}
             </a>
           </div>
         </form>
