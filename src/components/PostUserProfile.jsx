@@ -31,7 +31,7 @@ const UserProfile = (props) => {
          date : todayDate  // can set to todayDate, fixed String to manipulate the date 
       });
       console.log(res.data);
-      //navigate(`/profile/${props.userID}`);
+      navigate(`/profile/${props.userID}`);
     }
     catch (err) {
       console.log(err);
