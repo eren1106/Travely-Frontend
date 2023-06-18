@@ -17,7 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { handleSubmit, register, formState: { errors }  } = useForm();
 
-  const { setUser } = useContext(UserContext);
+  const { setUsers } = useContext(UserContext);
 
   const handleLogin = async (data) => {
     try {
@@ -28,7 +28,7 @@ const Login = () => {
       // localStorage.setItem('token', res.data.token);
       // localStorage.setItem('user_id', res.data.id);
       console.log(response.data)
-      setUser(response.data);
+      setUsers(response.data);
       localStorage.setItem('user', JSON.stringify(response.data));
       localStorage.setItem("currentUserID", response.data._id);
       navigate('/');

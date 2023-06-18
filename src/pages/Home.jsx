@@ -18,6 +18,8 @@ const Home = () => {
 
   //context API to get user data
   const { user } = useContext(UserContext);
+
+  // const [user, setUser] = useState(null);
   
   // address to fetch images
   const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -36,6 +38,7 @@ const Home = () => {
       setIsLoading(true);
       await getPosts();
       // await getUser();
+      // await getUser();
       setIsLoading(false);
     };
     const getPosts = async () => {
@@ -53,6 +56,23 @@ const Home = () => {
         console.error(error);
       }
     };
+
+    // const getUser = async () => {
+    //   try {
+    //     const currentUserID = localStorage.getItem("currentUserID");
+    //     const res = await axios.get(
+    //       `http://localhost:3001/api/users/${id}`
+    //     );
+    //     console.log("USER", id);
+    //     userData = res.data;
+    //     setUser(userData);
+
+    //     console.log("USER DATA", userData);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+
     fetchData();
   },[]);
 

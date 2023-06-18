@@ -84,6 +84,7 @@ const Profile = () => {
   }, [id]);
 
   const checkProfileExists = (profile) => {
+    console.log(profile);
     let defaultImg = "";
     if (profile.length === 0) {
       defaultImg = "defaultProfile.jpeg";
@@ -178,66 +179,6 @@ const Profile = () => {
   };
 
 
-  // useLayoutEffect(() => {
-  //   displayCurrentUserInfo();
-  // }, [divUsernameRef, divBioRef, username]);
-
-  // const displayCurrentUserInfo = () => {
-  //     const divusername = divUsernameRef.current;
-  //     const divBio = divBioRef.current;
-
-  //     if (divusername && divBio) {
-  //       const usernamenew = divusername.innerHTML;
-  //       const bionew = divBio.innerHTML;
-
-  //       if (inputUsernameRef.current && inputBioRef.current) {
-  //         const inputUsername = inputUsernameRef.current;
-  //         const inputBio = inputBioRef.current;
-
-  //         inputUsername.value = usernamenew === user.username ? '' : usernamenew;
-  //         inputBio.value = bionew === bio ? '' : bionew;
-
-
-  //         inputUsername.addEventListener('mouseover', () => {
-  //           if (inputUsername.value === usernamenew) {
-  //             inputUsername.value = '';
-  //           }
-  //         });
-
-  //         inputBio.addEventListener('mouseover', () => {
-  //           if (inputBio.value === bionew) {
-  //             inputBio.value = '';
-  //           }
-  //         });
-
-  //         inputUsername.addEventListener('mouseout', () => {
-  //           if (inputUsername.value === '') {
-  //             inputUsername.value = usernamenew;
-  //           }
-  //         });
-
-  //         inputBio.addEventListener('mouseout', () => {
-  //           if (inputBio.value === '') {
-  //             inputBio.value = bionew;
-  //           }
-  //         });
-
-  //         inputUsername.addEventListener('click', () => {
-  //           inputUsername.value = '';
-  //         });
-
-  //         inputBio.addEventListener('click', () => {
-  //           inputBio.value = '';
-  //         });
-  //       }
-  //     }
-
-  // };
-
-  // if (IsAccountDeleted) {
-  //   // Render a message or redirect to a different page after account deletion
-  //   return <div>Account successfully deleted!</div>;
-  // }
 
   const fileInputRef = useRef(null);
   const handleChangeProfilePic = async (event) => {
@@ -252,51 +193,62 @@ const Profile = () => {
       // console.log("FILE", file);
 
       const userID = localStorage.getItem("currentUserID");
-    let profilePic;
-    let data = new FormData();
-    profilePic = Date.now() + file.name;
-    data.append("name", profilePic);
-    data.append("file", file);
-    try {
-      console.log(data);
-      const picRes = await axios.post("http://localhost:3001/api/upload", data);
-      console.log("PROFILE PIC", picRes);
-    } catch (err) {
-      console.log(err);
-    }
-    // if (fileArray.length !== 0) {
+      let profilePic;
+      let data = new FormData();
+      profilePic = Date.now() + file.name;
+      data.append("name", profilePic);
+      data.append("file", file);
+      const updateProfile = JSON.parse(localStorage.getItem('user'));
+      updateProfile.profilePicture = profilePic;
+      localStorage.setItem('user', JSON.stringify(updateProfile));
+      setUsers(updateProfile);
+      try {
+        console.log(data);
+        const picRes = await axios.post("http://localhost:3001/api/upload", data);
+        console.log("PROFILE PIC", picRes);
+      } catch (err) {
+        console.log(err);
+      }
+      // if (fileArray.length !== 0) {
 
-    //   const filenames = []; // Create an empty array to store filenames
+      //   const filenames = []; // Create an empty array to store filenames
 
-    //   fileArray.forEach(async (currentFile) => {
-    //     let data = new FormData();
-    //     const fileName = Date.now() + currentFile.name;
-    //     data.append("name", fileName);
-    //     data.append("file", currentFile);
-    //     filenames.push(fileName); // Push the filename into the array
-    //     try {
-    //       console.log(data);
-    //       await axios.post("http://localhost:3001/api/upload", data);
-    //     } catch (err) {}
-    //   });
-    //   newPost.images = filenames;
+      //   fileArray.forEach(async (currentFile) => {
+      //     let data = new FormData();
+      //     const fileName = Date.now() + currentFile.name;
+      //     data.append("name", fileName);
+      //     data.append("file", currentFile);
+      //     filenames.push(fileName); // Push the filename into the array
+      //     try {
+      //       console.log(data);
+      //       await axios.post("http://localhost:3001/api/upload", data);
+      //     } catch (err) {}
+      //   });
+      //   newPost.images = filenames;
 
-    // }
-    try {
-      const res = await axios.put(`http://localhost:3001/api/users/${userID}`, {
-        ...user,
-        profilePicture: profilePic,
-      });
-      console.log("USERRR", res.data);
-      setUser(res.data);
-      // window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
+      // }
+      try {
+        const res = await axios.put(`http://localhost:3001/api/users/${userID}`, {
+          ...user,
+          profilePicture: profilePic,
+        });
+        console.log("USERRR", res.data);
+        setUser(res.data);
+
+        const response = await axios.get(
+          `http://localhost:3001/api/posts/user/${userID}`
+        );
+        const userPosts = response.data;
+        setPosts(userPosts);
+
+        // window.location.reload();
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     fileInputRef.current.click();
@@ -353,7 +305,7 @@ const Profile = () => {
               <img src={PUBLIC_FOLDER + user.profilePicture} alt="Profile" />
               <div className="overlay">
                 <button type="submit" className="change-btn">Change Picture</button>
-                <input ref={fileInputRef} style={{display: 'none'}} className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic} />
+                <input ref={fileInputRef} style={{ display: 'none' }} className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic} />
               </div>
             </div>
           </form>
@@ -457,7 +409,7 @@ const Profile = () => {
           </div>
         </div>
       }
-      <LoadingOverlay loading={overlayLoading}/>
+      <LoadingOverlay loading={overlayLoading} />
     </div>
   );
 

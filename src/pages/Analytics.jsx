@@ -8,6 +8,10 @@ import TopBar from "../components/Topbar";
 import { UserContext } from "../userContext";
 import TopPost from "../components/TopPostList";
 import { CircularProgress } from "@mui/material";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import ImportContactsTwoToneIcon from '@mui/icons-material/ImportContactsTwoTone';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+
 const Travely = () => {
 
   // address to fecth images
@@ -131,8 +135,8 @@ const Travely = () => {
             <>
               <div className="row">
                 <div className="column">
-                  <div className="icon1">
-                    <img src={PUBLIC_FOLDER + "total-visitors.png"} alt="" />
+                  <div className="icon1" fontSize='large'>
+                    <VisibilityOutlinedIcon/>
                   </div>
                   <div className="content">
                     <p className="total">Visitors (Today)</p>
@@ -141,7 +145,7 @@ const Travely = () => {
                 </div>
                 <div className="column">
                   <div className="icon2">
-                    <img src={PUBLIC_FOLDER + "total-posts.png"} alt="" />
+                    <ImportContactsTwoToneIcon/>
                   </div>
                   <div className="content">
                     <p className="total">Total Posts</p>
@@ -150,7 +154,7 @@ const Travely = () => {
                 </div>
                 <div className="column">
                   <div className="icon4">
-                    <img src={PUBLIC_FOLDER + "rating.png"} alt="" />
+                    <StarBorderOutlinedIcon/>
                   </div>
                   <div className="content">
                     <p className="total">Rating</p>
