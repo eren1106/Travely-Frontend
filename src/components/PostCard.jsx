@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "../styles/postcard.module.css";
 import UserProfile from "./PostUserProfile";
 import PostText from "./PostText";
@@ -83,7 +83,7 @@ const PostCard = (props) => {
       />
       <PostText description={props.description} />
       <div className={styles.imageContainer}>
-        <img className={styles.postImg} src={props.postimg} />
+        <img className={styles.postImg} src={props.postimg} alt="post"/>
       </div>
       <hr className={styles.lineBreak} />
       <div className={styles.userRating}>

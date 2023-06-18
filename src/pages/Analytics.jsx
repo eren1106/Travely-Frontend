@@ -9,7 +9,6 @@ import { UserContext } from "../userContext";
 import TopPost from "../components/TopPostList";
 import { CircularProgress } from "@mui/material";
 const Travely = () => {
-  const [selectedView, setSelectedView] = useState("month");
 
   // address to fecth images
   const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
