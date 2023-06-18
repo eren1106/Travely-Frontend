@@ -9,6 +9,7 @@ import styles from "../styles/profile.module.css";
 import { CircularProgress } from "@mui/material";
 import { UserContext } from '../userContext';
 import { formatDate } from '../utils';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [overlayLoading, setOverlayLoading] = useState(false);
 
   const { setUsers } = useContext(UserContext);
 
@@ -28,7 +29,7 @@ const Profile = () => {
   // const [gender, setGender] = useState("");
   // const [DOB, setDOB] = useState("");
   // const [dJoined, setDJoined] = useState("");
-  const [profilePic, setProfilePic] = useState(`${process.env.PUBLIC_URL}/assets/profile.jpg`);
+  const [profilePicFile, setProfilePicFile] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [IsAccountDeleted, setIsAccountDeleted] = useState(false);
 
@@ -58,7 +59,7 @@ const Profile = () => {
         console.log("USER", id);
         userData = res.data;
         setUser(userData);
-        
+
         console.log("USER DATA", userData);
       } catch (error) {
         console.error(error);
@@ -95,17 +96,6 @@ const Profile = () => {
   // const handleUsernameChange = (event) => {
   //   setUsername(event.target.value);
   // };
-
-  const handleChangeProfilePic = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        setProfilePic(reader.result);
-      });
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
@@ -249,6 +239,106 @@ const Profile = () => {
   //   return <div>Account successfully deleted!</div>;
   // }
 
+  const fileInputRef = useRef(null);
+  const handleChangeProfilePic = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // const reader = new FileReader();
+      // reader.addEventListener('load', () => {
+      //   setProfilePic(reader.result);
+      // });
+      // reader.readAsDataURL(file);
+      // setProfilePicFile(file);
+      // console.log("FILE", file);
+
+      const userID = localStorage.getItem("currentUserID");
+    let profilePic;
+    let data = new FormData();
+    profilePic = Date.now() + file.name;
+    data.append("name", profilePic);
+    data.append("file", file);
+    try {
+      console.log(data);
+      const picRes = await axios.post("http://localhost:3001/api/upload", data);
+      console.log("PROFILE PIC", picRes);
+    } catch (err) {
+      console.log(err);
+    }
+    // if (fileArray.length !== 0) {
+
+    //   const filenames = []; // Create an empty array to store filenames
+
+    //   fileArray.forEach(async (currentFile) => {
+    //     let data = new FormData();
+    //     const fileName = Date.now() + currentFile.name;
+    //     data.append("name", fileName);
+    //     data.append("file", currentFile);
+    //     filenames.push(fileName); // Push the filename into the array
+    //     try {
+    //       console.log(data);
+    //       await axios.post("http://localhost:3001/api/upload", data);
+    //     } catch (err) {}
+    //   });
+    //   newPost.images = filenames;
+
+    // }
+    try {
+      const res = await axios.put(`http://localhost:3001/api/users/${userID}`, {
+        ...user,
+        profilePicture: profilePic,
+      });
+      console.log("USERRR", res.data);
+      setUser(res.data);
+      // window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+    }
+  };
+
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    fileInputRef.current.click();
+    // const userID = localStorage.getItem("currentUserID");
+    // let profilePic;
+    // let data = new FormData();
+    // const fileName = Date.now() + profilePicFile.name;
+    // data.append("name", fileName);
+    // data.append("file", profilePicFile);
+    // try {
+    //   console.log(data);
+    //   profilePic = await axios.post("http://localhost:3001/api/upload", data);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    // // if (fileArray.length !== 0) {
+
+    // //   const filenames = []; // Create an empty array to store filenames
+
+    // //   fileArray.forEach(async (currentFile) => {
+    // //     let data = new FormData();
+    // //     const fileName = Date.now() + currentFile.name;
+    // //     data.append("name", fileName);
+    // //     data.append("file", currentFile);
+    // //     filenames.push(fileName); // Push the filename into the array
+    // //     try {
+    // //       console.log(data);
+    // //       await axios.post("http://localhost:3001/api/upload", data);
+    // //     } catch (err) {}
+    // //   });
+    // //   newPost.images = filenames;
+
+    // // }
+    // try {
+    //   const res = await axios.put(`http://localhost:3001/api/users/${userID}`, profilePic);
+    //   setUser(res.data);
+    //   // window.location.reload();
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  }
+
   return (
 
     <div style={{
@@ -258,15 +348,15 @@ const Profile = () => {
         isLoading ? <CircularProgress /> : <div id="wrapper">
           <SideBar loading={isLoading} username={user && user.username} profile={PUBLIC_FOLDER + checkProfileExists(user.profilePicture)} email={user && user.email} />
           <TopBar />
-          <div className="photo_container">
+          <form className="photo_container" onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="photo" id="pic" style={{ textAlign: 'center' }}>
-              <img src={profilePic} alt="Profile" />
+              <img src={PUBLIC_FOLDER + user.profilePicture} alt="Profile" />
               <div className="overlay">
-                <button className="change-btn">Change Picture</button>
-                <input className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic} />
+                <button type="submit" className="change-btn">Change Picture</button>
+                <input ref={fileInputRef} style={{display: 'none'}} className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic} />
               </div>
             </div>
-          </div>
+          </form>
 
           <div className="content_container">
             <div className="info_container">
@@ -367,6 +457,7 @@ const Profile = () => {
           </div>
         </div>
       }
+      <LoadingOverlay loading={overlayLoading}/>
     </div>
   );
 
