@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
       console.log('Retrieved user from localStorage:', JSON.parse(storedUser));
     }
   }, []);
+  
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

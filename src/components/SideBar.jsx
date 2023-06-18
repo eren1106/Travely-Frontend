@@ -7,16 +7,15 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { Button, CircularProgress } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
 const SideBar = (props) => {
   const navigate = useNavigate();
 
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
   const handleLogout = () => {
     localStorage.removeItem("currentUserID");
     navigate("/login");
   }
+  
   return (
     <nav className={styles.sidebar}>
       <div className={styles.profileContent}>

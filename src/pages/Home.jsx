@@ -31,8 +31,6 @@ const Home = () => {
     return defaultImg;
   };
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);

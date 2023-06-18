@@ -27,7 +27,8 @@ const Topbar = () => {
   const [searchResult, setSearchResult] = useState([]);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem("currentUserID");
+    navigate("/login");
   }
 
   // set timer on user input
@@ -81,11 +82,6 @@ const Topbar = () => {
     };
     fetchData();
   }, [input]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("currentUserID");
-    navigate("/login");
-  }
 
   return (
     <header className={styles.header}>

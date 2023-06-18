@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect, useRef} from 'react';
+import React, { useState, useLayoutEffect, useEffect, useRef, useContext} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import "../styles/profile.css";
 import axios from "axios"
@@ -7,25 +7,28 @@ import SideBar from "../components/SideBar";
 import PostCard from "../components/PostCard";
 import styles from "../styles/home.module.css";
 import { CircularProgress } from "@mui/material";
+import { UserContext } from '../userContext';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const {userID} = useParams();
-  const [user, setUser] = useState(null);
+  //const {userID} = useParams();
+  const userID = "6481966c3137e182902f753d";
+  const {user, setUser}=useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [username, setUsername] = useState('');
+  
+  const [username, setUsername] = useState(user && user.username);
+  const [profile, setProfile] = useState("");
   const [bio, setBio] = useState('I like travelling.');
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const [DOB, setDOB] = useState("");
+  const [dJoined, setDJoined] = useState("");
   const [profilePic, setProfilePic] = useState('assets/profile.jpg');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [IsAccountDeleted, setIsAccountDeleted] = useState(false);
-  const [originalUsername, setOriginalUsername] = useState('');
-  const [originalBio, setOriginalBio] = useState('');
   
-  
-  const [profile, setProfile] = useState("");
-  
+
 
   const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
   // Create refs for DOM elements
@@ -35,53 +38,27 @@ const Profile = () => {
   const inputBioRef = useRef(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const [userDataResponse, userPostsResponse] = await Promise.all([
-          axios.get(`http://localhost:3001/api/users/${userID}`),
-          axios.get(`http://localhost:3001/api/users/${userID}/posts`),
-        ]);
-
-        setUser(userDataResponse.data);
-        setPosts(userPostsResponse.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-
-      /*
+    const fetchData = async () => {
       setIsLoading(true);
-
       await getPosts();
-      await getUser();
-
       setIsLoading(false);
     };
+
     const getPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/posts/${userID}");
-        const userPosts = response.data;
-        //console.log(posts);
-        setPosts(userPosts);
+        const response = await axios.get(
+          `http://localhost:3001/api/posts/${userID}`
+        );
+        const userPost = response.data;
+        setPosts(userPost);
+        console.log(userPost);
       } catch (error) {
         console.error(error);
       }
     };
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3001/api/users/${userID}`);
-        setUser(res.data);
-        setUsername(res.data.username);
-        setProfilePic(checkProfileExists(res.data.profilePicture));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    */
-    fetchUserData();
-  }, [userID]);
+
+    fetchData();
+  },[userID, setUser]);
 
   const checkProfileExists = (profile) => {
     let defaultImg = "";
@@ -92,43 +69,7 @@ const Profile = () => {
     }
     return defaultImg;
   };
-      /*
-      setIsLoading(true);
 
-      await getPosts();
-      await getUser();
-
-      setIsLoading(false);
-      
-    };
-    const getPosts = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/api/posts");
-        const posts = response.data;
-        //console.log(posts);
-        setPosts(
-          // sort according to date
-          posts.sort((p1, p2) => {
-            return new Date(p2.createdAt) - new Date(p1.createdAt);
-          })
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3001/api/users/${userID}`);
-        setUser(res.data);
-        setProfile(checkProfileExists(res.data.profilePicture));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-    
-  }, [userID]);
-  */
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -179,6 +120,9 @@ const Profile = () => {
         username: usernamenew,
         bio: bionew,
       });
+
+      setUsername(usernamenew);
+
       console.log('Username and bio updated successfully in the database.');
     } catch (error) {
       console.error('Error updating username and bio in the database', error);
@@ -190,14 +134,13 @@ const Profile = () => {
       // Handle account deletion
       // Redirect to the appropriate route/page
       try {
-        const response = await axios.delete(`/api/users/${userID}`);
-        if (response.status === 200) {
-          setIsAccountDeleted(true);
+        const response = await axios.delete(`http://localhost:3001/api/users/${userID}`);
+        
           // Redirect to home page or any other desired page
-          navigate("/login");
-        } else {
           console.log(response.data);
-        }
+          navigate("/login");
+          localStorage.removeItem('user');
+
       } catch (error) {
         console.error('Error deleting account', error);
       }
@@ -207,9 +150,8 @@ const Profile = () => {
   
   useLayoutEffect(() => {
     displayCurrentUserInfo();
-  }, [divUsernameRef, divBioRef]);
-  
-  
+  }, [divUsernameRef, divBioRef, username]);
+    
   const displayCurrentUserInfo = () => {
       const divusername = divUsernameRef.current;
       const divBio = divBioRef.current;
@@ -222,8 +164,9 @@ const Profile = () => {
           const inputUsername = inputUsernameRef.current;
           const inputBio = inputBioRef.current;
 
-          inputUsername.value = usernamenew;
-          inputBio.value = bionew;
+          inputUsername.value = usernamenew === user.username ? '' : usernamenew;
+          inputBio.value = bionew === bio ? '' : bionew;
+
 
           inputUsername.addEventListener('mouseover', () => {
             if (inputUsername.value === usernamenew) {
@@ -261,14 +204,10 @@ const Profile = () => {
 
   };
 
-  
-
   if (IsAccountDeleted) {
     // Render a message or redirect to a different page after account deletion
     return <div>Account successfully deleted!</div>;
   }
-
-  
 
   return (
   
@@ -290,7 +229,7 @@ const Profile = () => {
             <div className="personal_container">
               <div className="details_title">Personal Details</div>
               <div className="actions_container">
-                <button type="button" id="delete_btn" onClick={handleDeleteAccount}>
+                <button type="submit" id="delete_btn" onClick={handleDeleteAccount}>
                   Delete Account
                 </button>
               </div>
@@ -317,12 +256,12 @@ const Profile = () => {
                         <br />
                         <br />
                         <label htmlFor="username">Username</label>
-                        <input type="text" id="username" name="username" defaultValue={username} required ref={inputUsernameRef}/>
+                        <input type="text" id="username" name="username" defaultValue={user.username} required ref={inputUsernameRef}/>
                         <br /> 
                         <br />
 
                         <label htmlFor="bio">Bio</label>
-                        <textarea id="bio" name="bio" defaultValue={bio} rows="4" cols="50" required ref={inputBioRef}></textarea>
+                        <textarea id="bio" name="bio" defaultValue={user.bio} rows="4" cols="50" required ref={inputBioRef}></textarea>
                         <br />
                         <br />
                       </div>
@@ -338,9 +277,9 @@ const Profile = () => {
               
             </div>
 
-            <div class="details_container">
-              <div class="row">
-                <div class="column_1">
+            <div className="details_container">
+              <div className="row">
+                <div className="column_1">
 
                   <p>Username </p><br/>
                   <p>Email</p><br/>
@@ -350,26 +289,22 @@ const Profile = () => {
 
                 </div>
 
-                <div class="column_2">
-
-                  <div id="namearea" ref={divUsernameRef}>Zheng Wu Bang</div><br/>
-
-                  <div id="emailarea">wbzheng@gmail.com</div><br/>
-
-                  <div id="genderarea">Male</div><br/>
-
-                  <div id="DOBarea">12/5/2000</div><br/>
-
-                  <div id="DJoinedarea">4/7/2019</div><br/>
-
+                <div className="column_2">
+                  
+                      <div id="namearea" ref={divUsernameRef}>{user&&user.username}</div><br/>
+                      <div id="emailarea">{user&&user.email}</div><br/>
+                      <div id="genderarea">{user&&user.gender}</div><br/>
+                      <div id="DOBarea">{user&&user.DOB}</div><br/>
+                      <div id="DJoinedarea">{user&&user.dJoined}</div><br/>
+              
                 </div>
               </div>
             </div>
 
             <hr/>
 
-            <div class="bio_container">
-              <p id="bio_details" ref={divBioRef}>I like travelling.</p>
+            <div className="bio_container">
+              <p id="bio_details" ref={divBioRef}>{user.bio}</p>
             </div>
           </div>
         </div>

@@ -9,9 +9,10 @@ import ForgetPassword from "./pages/ForgetPassword"
 import GoogleLogout from "./pages/GoogleLogout";
 import Search from "./pages/Search"
 import ProtectedRoutes from "./components/ProtectedRoutes";
-
+import { UserContext } from "./userContext";
+import { useContext } from "react";
+import{UserProvider}from './userContext'
 import Profile from "./pages/Profile";
-
 
 function App() {
 
@@ -19,22 +20,24 @@ function App() {
   const { user } = useContext(UserContext);
 
   return (
-    <div>
-      <Routes>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/post/:id" element={<Post />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/search" element={<Search />} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route path="*" element={<NotFound />} />
-        {/* <Route path="/logout" element={<GoogleLogout />} /> */}
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </div>
+    <UserProvider>
+      <div>
+        <Routes>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/post/:id" element={<Post />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/search" element={<Search />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path="*" element={<NotFound />} />
+          {/* <Route path="/logout" element={<GoogleLogout />} /> */}
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
+    </UserProvider>
   );
 }
 
