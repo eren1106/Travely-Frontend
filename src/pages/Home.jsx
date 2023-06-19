@@ -27,7 +27,7 @@ const Home = () => {
  
   const checkProfileExists = (profile) => {
     let defaultImg = "defaultProfile.jpeg";
-    if (profile && profile.length) {
+    if (profile) {
       defaultImg = profile;
     }
     return defaultImg;

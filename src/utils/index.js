@@ -12,3 +12,11 @@ export const formatDate = (myDate) => {
 
   return formattedDate;
 }
+
+export const checkProfileExists = (profile) => {
+  let defaultImg = "defaultProfile.jpeg";
+  if (profile) {
+    defaultImg = profile;
+  }
+  return defaultImg;
+};

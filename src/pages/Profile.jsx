@@ -302,7 +302,7 @@ const Profile = () => {
           <TopBar />
           <form className="photo_container" onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="photo" id="pic" style={{ textAlign: 'center' }}>
-              <img src={PUBLIC_FOLDER + user.profilePicture} alt="Profile" />
+              <img src={PUBLIC_FOLDER + checkProfileExists(user.profilePicture)} alt="Profile" />
               <div className="overlay">
                 <button type="submit" className="change-btn">Change Picture</button>
                 <input ref={fileInputRef} style={{ display: 'none' }} className="profileInput" type="file" id="profile-pic" accept="image/*" onChange={handleChangeProfilePic} />
