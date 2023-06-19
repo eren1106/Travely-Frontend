@@ -396,6 +396,7 @@ const Profile = () => {
                 <PostCard
                   profile={post.profilePicture}
                   key={post.postID}
+                  userID={post.userID}
                   postID={post.postID}
                   username={post.username}
                   location={post.location}

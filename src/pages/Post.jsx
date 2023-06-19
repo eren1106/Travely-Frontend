@@ -22,6 +22,7 @@ const Post = () => {
   const [comments, setComments] = useState([]);
   const [isCurrentUserPost, setIsCurrentUserPost] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [postUser, setPostUser] = useState(null);
   const navigate = useNavigate();
 
   // address to fecth images
@@ -29,6 +30,7 @@ const Post = () => {
 
   useEffect(() => {
     const storedUserID = localStorage.getItem("currentUserID");
+    let fetchedPostData;
 
     const fetchData = async () => {
       setInitialLoading(true);
@@ -37,6 +39,7 @@ const Post = () => {
       await fetchUserRating();
       await fetchComments();
       await fetchCurrentUserData();
+      await fetchPostUserData();
 
       setInitialLoading(false);
     }
@@ -53,6 +56,7 @@ const Post = () => {
         }
 
         console.log(res.data);
+        fetchedPostData = res.data;
       }
       catch (err) {
         console.log(err);
@@ -89,6 +93,12 @@ const Post = () => {
       const res = await axios.get(`http://localhost:3001/api/users/${storedUserID}`);
       console.log("USER", res.data);
       setCurrentUser(res.data);
+    }
+
+    const fetchPostUserData = async () => {
+      const res = await axios.get(`http://localhost:3001/api/users/${fetchedPostData.userID}`);
+      console.log("POST USER", res.data);
+      setPostUser(res.data);
     }
 
     fetchData();
@@ -274,9 +284,9 @@ const Post = () => {
                 <li className={styles.option} onClick={showDelete}>Delete post</li>
               </ul>}
               <section className={styles.topSection}>
-                <img className={styles.profilePic} src={`${PUBLIC_FOLDER}${currentUser.profilePicture}`} alt="profile pic" />
+                <img className={styles.profilePic} src={`${PUBLIC_FOLDER}${postUser.profilePicture}`} alt="profile pic" />
                 <div className={styles.topInfo}>
-                  <h2 className={styles.userName}>{currentUser.username}</h2>
+                  <h2 className={styles.userName}>{postUser.username}</h2>
                   <p className={styles.postDate}>{formatDate(postData.createdAt)}</p>
                 </div>
               </section>

@@ -58,7 +58,7 @@ const PostCard = (props) => {
   //navigate to post page
   const handleClick = async  () => {
     try {
-      const res =  await axios.post(`http://localhost:3001/api/posts/${props.postID}/view`, {
+      const res =  axios.post(`http://localhost:3001/api/posts/${props.postID}/view`, {
          userID: props.userID,
          date : todayDate //"2023-06-13" // can set to todayDate, fixed String to manipulate the date 
       });
