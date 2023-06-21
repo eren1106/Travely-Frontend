@@ -81,7 +81,6 @@ const ViewsChart = (props) => {
       const dateObj = new Date(date);
       return dateObj >= weekStart && dateObj <= weekEnd;
     }).length;
-
     weeks.push({ x: weekStart, y: count });
   }
   // const days = [
