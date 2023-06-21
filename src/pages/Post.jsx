@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import LoadingOverlay from '../components/LoadingOverlay';
-import { formatDate } from '../utils';
+import { checkProfileExists, formatDate } from '../utils';
 
 const Post = () => {
   const { id } = useParams();
@@ -284,7 +284,7 @@ const Post = () => {
                 <li className={styles.option} onClick={showDelete}>Delete post</li>
               </ul>}
               <section className={styles.topSection}>
-                <img className={styles.profilePic} src={`${PUBLIC_FOLDER}${postUser.profilePicture}`} alt="profile pic" />
+                <img className={styles.profilePic} src={`${PUBLIC_FOLDER}${checkProfileExists(postUser.profilePicture)}`} alt="profile pic" />
                 <div className={styles.topInfo}>
                   <h2 className={styles.userName}>{postUser.username}</h2>
                   <p className={styles.postDate}>{formatDate(postData.createdAt)}</p>
@@ -378,7 +378,7 @@ const Post = () => {
                   {
                     comments.map((comment, i) => (
                       <Comment
-                        imgUrl={`${PUBLIC_FOLDER}${comment.profilePicture}`}
+                        imgUrl={comment.profilePicture}
                         name={comment.username}
                         text={comment.commentText}
                         key={i}
@@ -387,7 +387,7 @@ const Post = () => {
                   }
                 </div>
                 <div className={styles.currentUserCommentBar}>
-                  <img className={styles.commentPic} src={`${PUBLIC_FOLDER}${currentUser.profilePicture}`} alt="profile pic" />
+                  <img className={styles.commentPic} src={`${PUBLIC_FOLDER}${checkProfileExists(postUser.profilePicture)}`} alt="profile pic" />
                   <input ref={commentRef} className={styles.commentInput} type="text" placeholder="Write a comment..." />
                   <button onClick={handleSubmitComment} className={`${styles.sendBtn} ${styles.iconWrapper} ${styles.blueBtn}`}>
                     <SendIcon />

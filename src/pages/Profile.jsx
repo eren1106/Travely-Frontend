@@ -290,6 +290,8 @@ const Profile = () => {
     //   console.log(err);
     // }
   }
+  //context API to get user data
+  const { user: currentUser } = useContext(UserContext);
 
   return (
 
@@ -298,7 +300,7 @@ const Profile = () => {
     }}>
       {
         isLoading ? <CircularProgress /> : <div id="wrapper">
-          <SideBar loading={isLoading} username={user && user.username} profile={PUBLIC_FOLDER + checkProfileExists(user.profilePicture)} email={user && user.email} />
+          <SideBar loading={isLoading} username={user && currentUser.username} profile={PUBLIC_FOLDER + checkProfileExists(currentUser.profilePicture)} email={currentUser && currentUser.email} />
           <TopBar />
           <form className="photo_container" onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="photo" id="pic" style={{ textAlign: 'center' }}>
